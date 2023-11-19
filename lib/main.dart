@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: 0,
         showUnselectedLabels: true,
         elevation: 18,
-        selectedIconTheme: IconThemeData(color: Colors.black, size: 27),  
+        selectedIconTheme:const  IconThemeData(color: Colors.black, size: 27),  
         unselectedIconTheme: IconThemeData(color: Colors.white70, size: 27),
         enableFeedback: true,
         unselectedFontSize: 13,
