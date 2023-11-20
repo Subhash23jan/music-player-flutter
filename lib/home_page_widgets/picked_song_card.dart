@@ -1,4 +1,4 @@
-
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:music_player_demo/constants/global_variables.dart';
@@ -23,10 +23,13 @@ Widget pickedSong(BuildContext context){
               alignment: Alignment.center,
               child: Text("Song name",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 18),),
             ),
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(bottomRight: Radius.circular(12),topRight: Radius.circular(12)),
-                  child: Image.network(GlobalVariables.imageUrl,fit:BoxFit.cover,width: MediaQuery.sizeOf(context).width*0.3,height:150,opacity:const AlwaysStoppedAnimation(0.3),)),
+            ClipRect(
+              child: BackdropFilter(
+                filter: ui.ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(bottomRight: Radius.circular(12),topRight: Radius.circular(12)),
+                    child: Image.network(GlobalVariables.imageUrl,fit:BoxFit.cover,width: MediaQuery.sizeOf(context).width*0.3,height:150,opacity:const AlwaysStoppedAnimation(0.3),)),
+              ),
             ),
           ],
         ),

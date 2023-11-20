@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:music_player_demo/constants/Global_Variables.dart';
 import 'package:music_player_demo/home_page_widgets/picked_song_card.dart';
 import 'package:music_player_demo/home_page_widgets/recently_listened.dart';
+import 'package:music_player_demo/home_page_widgets/top_artists.dart';
 
 void main() => runApp(const MyApp());
 
@@ -28,37 +29,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int index=0;
+  final global=GlobalVariables();
+   final ScrollController _controller=ScrollController(
+     keepScrollOffset: true,
+   );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: 0,
+        currentIndex: index,
+        onTap: (value) {
+          setState(() {
+            index=value;
+          });
+        },
+        enableFeedback: false,
         showUnselectedLabels: true,
         elevation: 18,
-        selectedIconTheme:const  IconThemeData(color: Colors.black, size: 27),  
-        unselectedIconTheme: IconThemeData(color: Colors.white70, size: 27),
-        enableFeedback: true,
         unselectedFontSize: 13,
         selectedFontSize: 14.5,
-        selectedLabelStyle: GoogleFonts.shortStack(color:Colors.black, fontWeight: FontWeight.bold),
+        unselectedIconTheme: const IconThemeData(color: Colors.white70),
+        selectedLabelStyle: GoogleFonts.shortStack(color:Colors.cyan.shade900, fontWeight: FontWeight.bold),
         unselectedLabelStyle: GoogleFonts.shortStack(color: Colors.white70,fontWeight: FontWeight.bold),
         unselectedItemColor: Colors.red,
         useLegacyColorScheme: false,
-        items: [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.search), label: "SEARCH"),
-         BottomNavigationBarItem(icon: Icon(CupertinoIcons.heart), label: "FAVOURITES"),
-          BottomNavigationBarItem(icon: Icon(Icons.auto_graph), label: "STATS"),
+        items:  [
+          getBottomItem(const Icon(CupertinoIcons.home),"HOME" ),
+          getBottomItem(const Icon(CupertinoIcons.search),"SEARCH" ),
+          getBottomItem(const Icon(CupertinoIcons.heart),"FAVOURITES" ),
+          getBottomItem(const Icon(Icons.stacked_line_chart),"STATS" ),
         ],
-        backgroundColor: const Color.fromARGB(255, 80, 78, 78),
+        backgroundColor:Colors.grey.shade900,
       ),
-      backgroundColor: GlobalVariables.backgroundColor,
+      backgroundColor:Colors.black,
       appBar:AppBar(
         backgroundColor: GlobalVariables.appBarColor,
-        toolbarHeight: kToolbarHeight+10,
+        toolbarHeight: kToolbarHeight+5,
         elevation: 18,
-        shadowColor: Colors.white12,
+        shadowColor: Colors.white24,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -111,14 +122,14 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: false,
       ),
-        body: SingleChildScrollView(
+      body: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.only(left: 20),
+            padding: const EdgeInsets.only(left: 15),
             child:  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 18),
+                  margin: const EdgeInsets.only(top: 18),
                   height:150,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,11 +141,12 @@ class _HomePageState extends State<HomePage> {
                                   .createShader(bounds);
                             },
                             child: Text(
-                              "  Picked for you",
-                              style: GoogleFonts.aBeeZee(
+                              "Picked for you",
+                              style: GoogleFonts.manrope(
                                   color: Colors.white,
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 17.5
+                                  ,fontWeight: FontWeight.w500
+                                  ),
                             )),
                         SizedBox(
                           height: 110,
@@ -159,11 +171,10 @@ class _HomePageState extends State<HomePage> {
                                   .createShader(bounds);
                             },
                             child: Text(
-                              "  Recently listened",
-                              style: GoogleFonts.aBeeZee(
+                              "Recently listened",
+                              style: GoogleFonts.manrope(
                                   color: Colors.white,
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 17.5,fontWeight: FontWeight.w500),
                             )),
                         SizedBox(
                           height: 110,
@@ -177,59 +188,312 @@ class _HomePageState extends State<HomePage> {
                     )),
                 Container(
                     margin: const EdgeInsets.only(top: 18),
-                    height:150,
+                    height:145,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                       ShaderMask(shaderCallback:(bounds) {
                         return GlobalVariables.getLineGradient().createShader(bounds);
-                      },child: Text("  Collections",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 19,fontWeight: FontWeight.bold),)),
-                        Row(
-                          children: [
-                            Container(
-                              height: 110,
-                              width: 160,
-                              decoration: BoxDecoration(
-                                 gradient: const LinearGradient(
-                                      colors: [
-                                        Color.fromARGB(255, 170, 75, 40),
-                                        Color.fromARGB(255, 18, 194, 221),
-                                        Color.fromARGB(255, 142, 219, 145),
-                                        Color.fromARGB(255, 47, 194, 181),
-                                        Color.fromARGB(255, 15, 231, 231)
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight),
-                                  borderRadius: BorderRadius.circular(12)
-                              ),
-                            ),
-                            const SizedBox(width: 25,),
-                            Container(
-                              height: 110,
-                              width: 160,
-                              decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                      colors: [
-                                        Color.fromARGB(255, 97, 207, 222),
-                                        Color.fromARGB(255, 213, 56, 208),
-                                        Color.fromARGB(255, 228, 68, 161),
-                                        Color.fromARGB(255, 220, 58, 58)
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight),
-                                  borderRadius: BorderRadius.circular(12)
-                              ),
-                            ),
-                          ],
-                        )
+                      },child: Text(" Collections",style: GoogleFonts.manrope(color: Colors.white,fontSize: 17.5,fontWeight: FontWeight.w500),)),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Expanded(
 
+                          child: ListView(
+                            padding: const EdgeInsets.only(right: 10),
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            children: [
+                              Card(
+                                elevation: 12,
+                                shadowColor: Colors.cyan,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+
+                                child: Container(
+                                  height: 100,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                     gradient:  LinearGradient(
+                                          colors: [
+                                            Colors.blue,
+                                            Colors.red,
+                                            Colors.cyan.shade800
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight),
+                                      borderRadius: BorderRadius.circular(15)
+                                  ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Best of the",
+                                          style: GoogleFonts.manrope(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          "90's",
+                                          style: GoogleFonts.redHatMono(
+                                            color: Colors.white,
+                                            fontSize: 33,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    )
+                                ),
+                              ),
+                              const SizedBox(width: 15,),
+                              Card(
+                                elevation: 45,
+                                shadowColor: Colors.pink,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                child: Container(
+                                  height: 100,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                          colors: [
+                                            Color.fromARGB(255, 97, 207, 222),
+                                            Color.fromARGB(255, 213, 56, 208),
+                                            Color.fromARGB(255, 228, 68, 161),
+                                             Colors.pinkAccent
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight),
+                                      borderRadius: BorderRadius.circular(15)
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "This is",
+                                        style: GoogleFonts.manrope(
+                                          color: Colors.white,
+                                          fontSize: 17,
+
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        "POP",
+                                        style: GoogleFonts.redHatMono(
+                                          color: Colors.white,
+                                          fontSize: 33,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  )
+
+                                ),
+                              ),
+                              const SizedBox(width: 15,),
+                              Card(
+                                elevation: 45,
+                                shadowColor: Colors.pink,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                child: Container(
+                                    height: 100,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                            colors: [
+                                             Colors.cyan,
+                                             Colors.green,
+                                             Colors.cyan
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight),
+                                        borderRadius: BorderRadius.circular(15)
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "All Out",
+                                          style: GoogleFonts.manrope(
+                                            color: Colors.white,
+                                            fontSize: 17,
+
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          "2010",
+                                          style: GoogleFonts.redHatMono(
+                                            color: Colors.white,
+                                            fontSize: 33,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    )
+
+                                ),
+                              ),
+                              const SizedBox(width: 15,),
+                              Card(
+                                elevation: 45,
+                                shadowColor: Colors.pink,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                child: Container(
+                                    height: 100,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                            colors: [
+                                              Colors.yellow,
+                                              Colors.orange,
+                                              Colors.orangeAccent
+                                            ],
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter),
+                                        borderRadius: BorderRadius.circular(15)
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "We will",
+                                          style: GoogleFonts.manrope(
+                                            color: Colors.white,
+                                            fontSize: 17,
+
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          "Rock",
+                                          style: GoogleFonts.redHatMono(
+                                            color: Colors.white,
+                                            fontSize: 33,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    )
+
+                                ),
+                              ),
+                              const SizedBox(width: 15,),
+                              Card(
+                                elevation: 45,
+                                shadowColor: Colors.pink,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                child: Container(
+                                    height: 100,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                            colors: [
+                                              Colors.pink,
+                                              Colors.red,
+                                              Colors.pink,
+                                              Color.fromARGB(255, 226, 216, 216)
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight),
+                                        borderRadius: BorderRadius.circular(15)
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Rhythm of",
+                                          style: GoogleFonts.manrope(
+                                            color: Colors.white,
+                                            fontSize: 17,
+
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          "Love",
+                                          style: GoogleFonts.redHatMono(
+                                            color: Colors.white,
+                                            fontSize: 33,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    )
+
+                                ),
+                              ),
+
+
+                            ],
+                          ),
+                        ),
                       ],
                     )),
+                const SizedBox(height: 10,),
+                ShaderMask(shaderCallback:(bounds) {
+                  return GlobalVariables.getLineGradient().createShader(bounds);
+                },child: Text(" Top 10 Artists",style: GoogleFonts.manrope(color: Colors.white,fontSize: 17.5,fontWeight: FontWeight.w500),)),
+                ListView.builder(
+                  key: const Key("subhash"),
+                  shrinkWrap: true,
+                  controller: _controller,
+                  itemCount: 10,
+                  scrollDirection: Axis.vertical,
+                  physics: const ScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index)=>topArtists(context),
+                )
+
               ],
             ),
           ),
         ),
+      floatingActionButton: FloatingActionButton.small(
+          elevation: 20,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(35)
+          ),
+          onPressed:(){
+            if(_controller.hasClients){
+              print("clicked");
+              final position = _controller.position.minScrollExtent;
+              print(position);
+              _controller.animateTo(
+                position,
+                duration: const Duration(seconds: 1),
+                curve: Curves.easeOut,
+              );
+            }
+          },child:const Icon(CupertinoIcons.arrow_up_to_line_alt,color: Colors.black,size: 20,)),
       );
+  }
+  BottomNavigationBarItem getBottomItem(Icon icon,String text){
+    return BottomNavigationBarItem(icon:
+    ShaderMask(shaderCallback:(bounds) {
+      return const LinearGradient(colors: [
+        Colors.cyan,
+        Colors.cyanAccent,
+        Colors.cyan,
+        Colors.cyanAccent,
+      ], begin: Alignment.topLeft, end: Alignment.bottomRight).createShader(bounds);
+    },child:icon) , label:text);
   }
 }

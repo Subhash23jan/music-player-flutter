@@ -24,11 +24,9 @@ Widget recentPlays(BuildContext context){
               alignment: Alignment.center,
               child: Text("Song name",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 18),),
             ),
-            Expanded(
-              child: ClipRRect(
-                  borderRadius: const BorderRadius.only(bottomRight: Radius.circular(12),topRight: Radius.circular(12)),
-                  child: Image.network(imageUrl,fit:BoxFit.cover,width: MediaQuery.sizeOf(context).width*0.4,height:150,opacity:const AlwaysStoppedAnimation(0.3),)),
-            ),
+            ClipRRect(
+                borderRadius: const BorderRadius.only(bottomRight: Radius.circular(12),topRight: Radius.circular(12)),
+                child: Image.network(imageUrl,fit:BoxFit.cover,width: MediaQuery.sizeOf(context).width*0.4,height:150,opacity:const AlwaysStoppedAnimation(0.3),)),
           ],
         ),
       ],
