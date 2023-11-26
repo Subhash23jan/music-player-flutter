@@ -16,7 +16,7 @@ Widget pickedSong(BuildContext context){
       children: [
         ClipRRect(
             borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12),topLeft: Radius.circular(12)),
-            child: Image.network(GlobalVariables.imageUrl,fit:BoxFit.fill,width: MediaQuery.sizeOf(context).width*0.3,height:150,opacity:const AlwaysStoppedAnimation(0.45),)),
+            child: Image.network(GlobalVariables.imageUrl,fit:BoxFit.cover,width: MediaQuery.sizeOf(context).width*0.3,height:150,opacity:const AlwaysStoppedAnimation(0.7),)),
         Stack(
           children: [
             Align(
