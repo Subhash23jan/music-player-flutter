@@ -1,11 +1,13 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:music_player_demo/constants/Global_Variables.dart';
 import 'package:music_player_demo/home_page_widgets/picked_song_card.dart';
 import 'package:music_player_demo/home_page_widgets/recently_listened.dart';
 import 'package:music_player_demo/home_page_widgets/top_artists.dart';
+import 'package:music_player_demo/pages/playlist_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -115,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                borderRadius: BorderRadius.circular(25),
                child: CircleAvatar(
                 radius: 21,
-                child: Image.network("https://instagram.fblr24-3.fna.fbcdn.net/v/t51.2885-19/403837282_1030048844930280_3452019384313875445_n.jpg?stp=dst-jpg_s320x320&_nc_ht=instagram.fblr24-3.fna.fbcdn.net&_nc_cat=100&_nc_ohc=-zVVHKWy5z0AX-Us4Nv&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfDFdv50gGROTtb2WBR4jXW8cN1GAEs88cpTG-Q6Sr48xA&oe=655D08BD&_nc_sid=8b3546"),
+                child: Image.network("https://qph.cf2.quoracdn.net/main-qimg-7a677dd3e89f2ac85ac5fd0d9993d77b-lq"),
             ),
              )
           ],
@@ -227,27 +229,30 @@ class _HomePageState extends State<HomePage> {
                                           end: Alignment.bottomRight),
                                       borderRadius: BorderRadius.circular(15)
                                   ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Best of the",
-                                          style: GoogleFonts.manrope(
-                                            color: Colors.white,
-                                            fontSize: 17,
+                                    child: InkWell(
+                                      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PlaylistPage(),)),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Best of the",
+                                            style: GoogleFonts.manrope(
+                                              color: Colors.white,
+                                              fontSize: 17,
+                                            ),
+                                            textAlign: TextAlign.center,
                                           ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          "90's",
-                                          style: GoogleFonts.redHatMono(
-                                            color: Colors.white,
-                                            fontSize: 33,
-                                            fontWeight: FontWeight.bold,
+                                          Text(
+                                            "90's",
+                                            style: GoogleFonts.redHatMono(
+                                              color: Colors.white,
+                                              fontSize: 33,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
                                           ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     )
                                 ),
                               ),
