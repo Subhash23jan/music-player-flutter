@@ -7,6 +7,7 @@ import 'package:music_player_demo/constants/Global_Variables.dart';
 import 'package:music_player_demo/home_page_widgets/picked_song_card.dart';
 import 'package:music_player_demo/home_page_widgets/recently_listened.dart';
 import 'package:music_player_demo/home_page_widgets/top_artists.dart';
+import 'package:music_player_demo/pages/favourites_page.dart';
 import 'package:music_player_demo/pages/playlist_page.dart';
 
 void main() => runApp(const MyApp());
@@ -263,45 +264,48 @@ class _HomePageState extends State<HomePage> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15)
                                 ),
-                                child: Container(
-                                  height: 100,
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                          colors: [
-                                            Color.fromARGB(255, 97, 207, 222),
-                                            Color.fromARGB(255, 213, 56, 208),
-                                            Color.fromARGB(255, 228, 68, 161),
-                                             Colors.pinkAccent
-                                          ],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight),
-                                      borderRadius: BorderRadius.circular(15)
+                                child: InkWell(
+                                  onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FavouritesPage(),)),
+                                  child: Container(
+                                    height: 100,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                            colors: [
+                                              Color.fromARGB(255, 97, 207, 222),
+                                              Color.fromARGB(255, 213, 56, 208),
+                                              Color.fromARGB(255, 228, 68, 161),
+                                               Colors.pinkAccent
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight),
+                                        borderRadius: BorderRadius.circular(15)
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "This is",
+                                          style: GoogleFonts.manrope(
+                                            color: Colors.white,
+                                            fontSize: 17,
+
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          "POP",
+                                          style: GoogleFonts.redHatMono(
+                                            color: Colors.white,
+                                            fontSize: 33,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    )
+
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "This is",
-                                        style: GoogleFonts.manrope(
-                                          color: Colors.white,
-                                          fontSize: 17,
-
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      Text(
-                                        "POP",
-                                        style: GoogleFonts.redHatMono(
-                                          color: Colors.white,
-                                          fontSize: 33,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  )
-
                                 ),
                               ),
                               const SizedBox(width: 15,),
