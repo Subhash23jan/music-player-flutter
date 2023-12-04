@@ -146,8 +146,8 @@ class _PlaySongState extends State<PlaySong> {
                   margin:const EdgeInsets.only(top: 20,bottom: 15),
                   alignment: Alignment.center,
                   child: ListTile(
-                      subtitle:Text("Cindly Lauper",style: GoogleFonts.manrope(color: Colors.white24,fontWeight: FontWeight.w600,fontSize: 16),),
-                    title:Text("Girls Just Want to Have Fun",style: GoogleFonts.openSans(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                      subtitle:Text("M M Keerevani",style: GoogleFonts.manrope(color: Colors.white24,fontWeight: FontWeight.w600,fontSize: 16),),
+                    title:Text("Saahore Bahubali",style: GoogleFonts.openSans(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
                     trailing:const Icon(Icons.favorite_outlined,color: Colors.white,size: 26,)
                   ),
         ),

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:music_player_demo/songs/all_songs.dart';
 import 'package:music_player_demo/constants/Global_Variables.dart';
 import 'package:music_player_demo/home_page_widgets/picked_song_card.dart';
 import 'package:music_player_demo/home_page_widgets/recently_listened.dart';
@@ -91,15 +92,18 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child:  Text("Home",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                   ),
-                  Container(
-                    width: 90,
-                    height: 35,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                       color: Colors.grey
+                  InkWell(
+                    onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AllSongs(),)),
+                    child: Container(
+                      width: 90,
+                      height: 35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                         color: Colors.grey
+                      ),
+                      child:  Text("Music",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                     ),
-                    child:  Text("Music",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                   ),
                   Container(
                     width: 90,

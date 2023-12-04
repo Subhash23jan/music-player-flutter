@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 import '../constants/Global_Variables.dart';
 import '../play_song/play_songs.dart';
 
-Widget playListSong(BuildContext context){
+Widget songWidget(BuildContext context,SongModel songModel, OnAudioQuery audioQuery,){
   return ListTile(
     titleAlignment: ListTileTitleAlignment.center,
     onTap: () {
@@ -21,6 +22,8 @@ Widget playListSong(BuildContext context){
         borderRadius: BorderRadius.circular(25),
       ),
       child: Container(
+        width: 45,
+        height: 45,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             border: Border.all(
@@ -29,34 +32,32 @@ Widget playListSong(BuildContext context){
             )
         ),
         child: ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: Image.network(GlobalVariables.imageUrl,width: 45,height: 45,fit: BoxFit.fill,)),
+            borderRadius: BorderRadius.circular(20),
+            child:QueryArtworkWidget(
+             controller: audioQuery,
+             id: songModel.id,
+             type: ArtworkType.AUDIO,
+        ),),
       ),
     ),
     style: ListTileStyle.drawer,
     selected: true,
     selectedColor: GlobalVariables.appBarColor,
     title:Padding(
-      padding: const EdgeInsets.only(left: 20),
-      child: Text("Song Name",style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15.5,fontWeight: FontWeight.w700),),
+      padding: const EdgeInsets.only(left: 1),
+      child: Text(songModel.displayName,style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.w700),maxLines: 1,
+        overflow: TextOverflow.ellipsis,),
     ),
     subtitle:Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.only(left: 1),
       child: ShaderMask(shaderCallback:(bounds) {
         return GlobalVariables.getLineGradient().createShader(bounds);
-      },child: Text("Artist name",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12.5,fontWeight: FontWeight.w500),)),
+      },child: Text(songModel.artist??"unknown",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12.5,fontWeight: FontWeight.w500),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,)),
     ),
-    trailing:  SizedBox(
-      width: MediaQuery.sizeOf(context).width*0.28,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(onPressed: (){},
-              icon: Icon(CupertinoIcons.heart,color:Colors.yellow.shade900,size: 25,)),
-          IconButton(onPressed: (){},
-              icon:  Icon(Icons.play_circle_outline_outlined,color:Colors.yellow.shade900,size: 27,)),
-        ],
-      ),
-    ),
+    trailing:IconButton(onPressed: (){},
+        padding: const EdgeInsets.only(left: 5),
+        icon: const Icon(CupertinoIcons.heart_fill,color:Colors.redAccent,size: 25,)),
   );
 }

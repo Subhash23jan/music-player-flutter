@@ -31,19 +31,10 @@ Widget favouriteSong(int index){
           padding: const EdgeInsets.only(left: 20),
           child: Text("Movie name",style: GoogleFonts.manrope(color: Colors.white38,fontSize: 12.5),),
         ),
-        trailing:  Container(
-          height: 45,
-          width: 45,
-          margin: const EdgeInsets.only(right: 10),
-          decoration:  BoxDecoration(
-              color: GlobalVariables.appBarColor,
-              border: Border.all(color: Colors.black,width: 2.5),
-              borderRadius: BorderRadius.circular(25)
-          ),
-          child: IconButton(
-              onPressed: (){},
-              icon: const Icon(Icons.play_arrow,color:Colors.white60,size: 27,)),
-        )
+        trailing:  IconButton(
+            onPressed: (){},
+            style: ButtonStyle(),
+            icon: const Icon(Icons.favorite_outlined,color:Colors.redAccent,size: 27,))
     ),
   );
 }
