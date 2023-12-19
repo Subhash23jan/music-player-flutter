@@ -1,6 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:music_player_demo/songs/all_songs.dart';
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child:  Text("Home",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                   ),
-                  InkWell(
+                  GestureDetector(
                     onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AllSongs(),)),
                     child: Container(
                       width: 90,
@@ -376,8 +376,8 @@ class _HomePageState extends State<HomePage> {
                                               Colors.orange,
                                               Colors.orangeAccent
                                             ],
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter),
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight),
                                         borderRadius: BorderRadius.circular(15)
                                     ),
                                     child: Column(
@@ -486,7 +486,9 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed:(){
             if(_controller.hasClients){
-              print("clicked");
+              if (kDebugMode) {
+                print("clicked");
+              }
               final position = _controller.position.minScrollExtent;
               print(position);
               _controller.animateTo(

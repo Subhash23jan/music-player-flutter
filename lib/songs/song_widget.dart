@@ -10,7 +10,7 @@ Widget songWidget(BuildContext context,SongModel songModel, OnAudioQuery audioQu
   return ListTile(
     titleAlignment: ListTileTitleAlignment.center,
     onTap: () {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PlaySong(),));
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  PlaySong(songModel: songModel,audioQuery: audioQuery ),));
     },
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(1)
@@ -40,9 +40,6 @@ Widget songWidget(BuildContext context,SongModel songModel, OnAudioQuery audioQu
         ),),
       ),
     ),
-    style: ListTileStyle.drawer,
-    selected: true,
-    selectedColor: GlobalVariables.appBarColor,
     title:Padding(
       padding: const EdgeInsets.only(left: 1),
       child: Text(songModel.displayName,style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.w700),maxLines: 1,
@@ -58,6 +55,6 @@ Widget songWidget(BuildContext context,SongModel songModel, OnAudioQuery audioQu
     ),
     trailing:IconButton(onPressed: (){},
         padding: const EdgeInsets.only(left: 5),
-        icon: const Icon(CupertinoIcons.heart_fill,color:Colors.redAccent,size: 25,)),
+        icon: const Icon(CupertinoIcons.heart,color:Colors.redAccent,size: 25,)),
   );
 }
