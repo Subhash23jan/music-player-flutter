@@ -9,7 +9,7 @@ Widget topArtists(BuildContext context)
   return ListTile(
     titleAlignment: ListTileTitleAlignment.center,
     onTap: () {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PlaySong(),));
+      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PlaySong(),));
     },
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(1)
