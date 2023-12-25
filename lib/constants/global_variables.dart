@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:on_audio_query/on_audio_query.dart';
 class GlobalVariables {
+  static List<SongModel>songs=[];
   static getLineGradient() {
     return const LinearGradient(colors: [
       Color.fromARGB(255, 221, 217, 217),

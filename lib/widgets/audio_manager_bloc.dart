@@ -12,14 +12,15 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
     on<AudioManagerEvent>((event, emit) {
       on<AudioPlay>((event, emit) {
             SongModel songModel=event.songModel;
-            emit(AudioManagerPlaying(songModel));
+            return emit(AudioManagerPlaying(songModel));
       },);
       on<AudioPause>((event, emit){
-        emit(AudioManagerPause(event.songModel));
+        return emit(AudioManagerPause(event.songModel));
       });
-      on<AudioResume>((event, emit){
-        emit(AudioManagerPlaying(event.songModel));
-      });
+      on<AudioResume>((event, emit) {
+        SongModel songModel=event.songModel;
+        return emit(AudioManagerPlaying(songModel));
+      },);
     });
   }
 }
