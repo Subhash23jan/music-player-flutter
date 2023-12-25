@@ -27,6 +27,9 @@ class _FavouritesPageState extends State<FavouritesPage> {
   }
   getFavourites() async {
     SongsManager.favouriteSongs=await _dataBaseHelper.getFavourites();
+    setState(() {
+
+    });
   }
   @override
   Widget build(BuildContext context) {

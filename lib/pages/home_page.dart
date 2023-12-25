@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,12 +7,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:music_player_demo/Sqlfite/database_helper.dart';
 import 'package:music_player_demo/constants/songs_manager.dart';
 import 'package:music_player_demo/pages/playlist_page.dart';
+import 'package:music_player_demo/play_song/play_songs.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/Global_Variables.dart';
 import '../home_page_widgets/picked_song_card.dart';
 import '../home_page_widgets/recently_listened.dart';
 import '../home_page_widgets/top_artists.dart';
+import '../provider/songs_provider.dart';
 import '../songs/all_songs.dart';
 import 'favourites_page.dart';
 class HomePage extends StatefulWidget {
@@ -32,21 +37,43 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    getSongList();
     initFavourites();
     print("Subhash");
   }
-
-  void initFavourites() async {
+ void getSongList()async{
+   FutureBuilder<List<SongModel>>(
+       future: audioQuery.querySongs(
+         uriType: UriType.EXTERNAL,
+         sortType: SongSortType.ALBUM,
+         ignoreCase: true,
+       ),
+     builder: (BuildContext context, AsyncSnapshot<List<SongModel>> item) {
+         if (item.hasError) {
+         return Text(item.error.toString());
+         }
+         if (item.data == null) {
+         return const Center(child: CircularProgressIndicator(color: Colors.white,strokeWidth: 2,));
+         }
+         if (item.data!.isEmpty) return const Text("Nothing found!");
+         SongsManager.songsList=item.data!;
+         return const SizedBox();
+     },
+   );
+ }
+ void initFavourites() async {
     await getFavourites();
   }
   getFavourites() async {
-    SongsManager.recentListens=await _dataBaseHelper.getRecent();
+    await _dataBaseHelper.getRecent();
     if (kDebugMode) {
       print(SongsManager.recentListens.length);
     }
   }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomNavigationBar(
@@ -142,36 +169,34 @@ class _HomePageState extends State<HomePage> {
           child:  Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+          Container(
+          margin: const EdgeInsets.only(top: 18),
+          height: 150,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ShaderMask(
+                shaderCallback: (bounds) {
+                  return GlobalVariables.getLineGradient().createShader(bounds);
+                },
+                child: Text(
+                  "Picked for you",
+                  style: GoogleFonts.manrope(
+                    color: Colors.white,
+                    fontSize: 17.5,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
               Container(
-                  margin: const EdgeInsets.only(top: 18),
-                  height:150,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ShaderMask(
-                          shaderCallback: (bounds) {
-                            return GlobalVariables.getLineGradient()
-                                .createShader(bounds);
-                          },
-                          child: Text(
-                            "Picked for you",
-                            style: GoogleFonts.manrope(
-                                color: Colors.white,
-                                fontSize: 17.5
-                                ,fontWeight: FontWeight.w500
-                            ),
-                          )),
-                      SizedBox(
-                        height: 110,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 4,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) =>pickedSong(context),),
-                      )
-                    ],
-                  )),
+                height: 110,
+                margin: const EdgeInsets.only(left: 5),
+                child: buildPickedSongs(),
+              ),
+            ],
+          ),
+        ),
               Container(
                   margin: const EdgeInsets.only(top: 18),
                   height:150,
@@ -192,11 +217,19 @@ class _HomePageState extends State<HomePage> {
                           )),
                       SizedBox(
                         height: 110,
-                        child: ListView.builder(
+                        child: SongsManager.recentListens.isNotEmpty?ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: 2,
+                          itemCount:SongsManager.recentListens.length,
                           shrinkWrap: true,
-                          itemBuilder: (context, index) =>recentPlays(context,index,audioQuery),),
+                          itemBuilder: (context, index) =>GestureDetector(
+                            onTap: () {
+                              List<SongModel>songs=SongsManager.recentListens.reversed.toList();
+                              Provider.of<SongsProvider>(context, listen: false).updateCurrentSong(songs[index]);
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                                return PlaySong(audioQuery: audioQuery, songList:songs, index:index);
+                              },));
+                            },
+                              child: recentPlays(context,SongsManager.recentListens.length-index-1,audioQuery)),):const Text("You haven't played any songs ,Let's start your day with songs",style: TextStyle(color: Colors.white,fontSize: 18),),
                       )
                     ],
                   )),
@@ -529,6 +562,46 @@ class _HomePageState extends State<HomePage> {
             }
           },child:const Icon(CupertinoIcons.arrow_up_to_line_alt,color: Colors.black,size: 20,)),
     );
+  }
+  Widget buildPickedSongs() {
+    try {
+      return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 5,
+        shrinkWrap: true,
+        itemBuilder: (context, index1) {
+          int index = Random().nextInt(SongsManager.songsList.length + 1);
+          return GestureDetector(
+            onTap: () {
+              Provider.of<SongsProvider>(context, listen: false)
+                  .updateCurrentSong(SongsManager.songsList[index]);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) {
+                  return PlaySong(
+                    audioQuery: audioQuery,
+                    songList: [SongsManager.songsList[index]],
+                    index: 0,
+                  );
+                },
+              ));
+            },
+            child: pickedSong(context, audioQuery, index),
+          );
+        },
+      );
+    } catch (error) {
+      print("Error: $error");
+      return const Center(
+        child: Text(
+          "Wait some time something went wrong!!",
+          style: TextStyle(
+            color: Colors.red, // Adjust the color as needed
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      );
+    }
   }
 
   BottomNavigationBarItem getBottomItem(Icon icon,String text){

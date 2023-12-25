@@ -2,7 +2,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:music_player_demo/pages/permissionPage.dart';
+import 'package:music_player_demo/pages/permissionHandlerPage.dart';
 import 'package:music_player_demo/provider/songs_provider.dart';
 import 'package:provider/provider.dart';
 
