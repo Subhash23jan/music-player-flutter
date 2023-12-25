@@ -2,15 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-
+import 'package:provider/provider.dart';
 import '../constants/Global_Variables.dart';
 import '../play_song/play_songs.dart';
+import '../provider/songs_provider.dart';
 
-Widget songWidget(BuildContext context,SongModel songModel, OnAudioQuery audioQuery,){
+Widget songWidget(BuildContext context,List<SongModel>songList,int index, OnAudioQuery audioQuery,){
   return ListTile(
     titleAlignment: ListTileTitleAlignment.center,
     onTap: () {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  PlaySong(songModel: songModel,audioQuery: audioQuery ),));
+      final songsProvider = Provider.of<SongsProvider>(context,listen: false);
+      songsProvider.updateCurrentSong(songList[index]);
+      songsProvider.notifyListeners();
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  PlaySong(audioQuery: audioQuery, songList:songList, index:index, ),));
     },
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(1)
@@ -35,21 +39,21 @@ Widget songWidget(BuildContext context,SongModel songModel, OnAudioQuery audioQu
             borderRadius: BorderRadius.circular(20),
             child:QueryArtworkWidget(
              controller: audioQuery,
-             id: songModel.id,
+             id: songList[index].id,
              type: ArtworkType.AUDIO,
         ),),
       ),
     ),
     title:Padding(
       padding: const EdgeInsets.only(left: 1),
-      child: Text(songModel.displayName,style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.w700),maxLines: 1,
+      child: Text(songList[index].displayName,style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.w700),maxLines: 1,
         overflow: TextOverflow.ellipsis,),
     ),
     subtitle:Padding(
       padding: const EdgeInsets.only(left: 1),
       child: ShaderMask(shaderCallback:(bounds) {
         return GlobalVariables.getLineGradient().createShader(bounds);
-      },child: Text(songModel.artist??"unknown",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12.5,fontWeight: FontWeight.w500),
+      },child: Text(songList[index].artist??"unknown",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12.5,fontWeight: FontWeight.w500),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,)),
     ),

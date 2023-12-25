@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:music_player_demo/Sqlfite/database_helper.dart';
 import 'package:music_player_demo/widgets/favourite_song_widget.dart';
-
-import '../constants/Global_Variables.dart';
-import '../play_song/play_songs.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import '../constants/songs_manager.dart';
 class FavouritesPage extends StatefulWidget {
   const FavouritesPage({super.key});
 
@@ -13,10 +13,25 @@ class FavouritesPage extends StatefulWidget {
 }
 
 class _FavouritesPageState extends State<FavouritesPage> {
+  final DataBaseHelper _dataBaseHelper=DataBaseHelper();
+  final OnAudioQuery audioQuery = OnAudioQuery();
+
+  @override
+  void initState() {
+    super.initState();
+    initFavourites();
+  }
+
+  void initFavourites() async {
+    await getFavourites();
+  }
+  getFavourites() async {
+    SongsManager.favouriteSongs=await _dataBaseHelper.getFavourites();
+  }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: GlobalVariables.appBarColor,
+      backgroundColor:const Color(0x100850FF),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -100,10 +115,10 @@ class _FavouritesPageState extends State<FavouritesPage> {
           ),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: 15,
+              itemCount: SongsManager.favouriteSongs.length,
               physics:const ScrollPhysics(),
               itemBuilder: (context, index) {
-              return favouriteSong(index);
+              return favouriteSong(index,audioQuery);
             },)
           ],
         ),

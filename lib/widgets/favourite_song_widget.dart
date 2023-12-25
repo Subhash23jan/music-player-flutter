@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 import '../constants/Global_Variables.dart';
+import '../constants/songs_manager.dart';
 
-Widget favouriteSong(int index){
+Widget favouriteSong(int index,OnAudioQuery audioQuery){
   return Container(
     margin: const EdgeInsets.only(bottom: 15),
     child: ListTile(
@@ -13,27 +15,31 @@ Widget favouriteSong(int index){
         ),
         leading: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(50),
               border: Border.all(
-                  color: Colors.white,
+                  color: Colors.cyanAccent.shade700,
                   width: 1.9
               )
           ),
           child: ClipRRect(
               borderRadius: BorderRadius.circular(25),
-              child: Image.network(GlobalVariables.imageUrl,width: 40,height: 40,fit: BoxFit.fill,)),
-        ),
+            child:QueryArtworkWidget(
+            controller: audioQuery,
+            id: SongsManager.favouriteSongs[index].id,
+            type: ArtworkType.AUDIO,
+          ),
+        ),),
         title:Padding(
           padding: const EdgeInsets.only(left: 20),
-          child: Text("Song Name",style:GoogleFonts.manrope(color: Colors.white70,fontSize: 15.5,fontWeight: FontWeight.w600),),
+          child: Text(SongsManager.favouriteSongs[index].displayName,style:GoogleFonts.manrope(color: Colors.white70,fontSize: 15.5,fontWeight: FontWeight.w600),),
         ),
         subtitle:Padding(
           padding: const EdgeInsets.only(left: 20),
-          child: Text("Movie name",style: GoogleFonts.manrope(color: Colors.white38,fontSize: 12.5),),
+          child: Text(SongsManager.favouriteSongs[index].artist??"unknown",style: GoogleFonts.manrope(color: Colors.white38,fontSize: 12.5),),
         ),
         trailing:  IconButton(
             onPressed: (){},
-            style: ButtonStyle(),
+            style: const ButtonStyle(),
             icon: const Icon(Icons.favorite_outlined,color:Colors.redAccent,size: 27,))
     ),
   );

@@ -16,7 +16,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white12,
+      backgroundColor: const Color(0x160793FF),
       appBar:AppBar(
         backgroundColor: Colors.black26,
         toolbarHeight: kToolbarHeight-10,
