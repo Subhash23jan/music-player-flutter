@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
@@ -10,6 +9,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/Global_Variables.dart';
+import '../constants/songs_manager.dart';
 
 class PlaySong extends StatefulWidget {
   const PlaySong({super.key, required this.audioQuery, required this.songList, required this.index});
@@ -33,9 +33,7 @@ class _PlaySongState extends State<PlaySong> {
     "for this feature",
     "Thanks - Team Shashank",
   ];
-
   bool isLyricsOpened = false;
-
   @override
   void initState() {
     super.initState();
@@ -44,10 +42,8 @@ class _PlaySongState extends State<PlaySong> {
 
   Future<void> playSongFromUri(BuildContext context) async {
     SongModel song = Provider.of<SongsProvider>(context, listen: false).currentSong;
+    SongsManager.recentListens.add(song);
     _dataBaseHelper.addToRecent(Favourites(song.getMap));
-    // if (kDebugMode) {
-    //   print(song.uri);
-    // }
     await _audioPlayer.setUrl(song.uri ?? "");
     _audioPlayer.play();
   }
@@ -116,7 +112,8 @@ class _PlaySongState extends State<PlaySong> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(top: 20, bottom: 15),
+                  height: 100,
+                  margin: const EdgeInsets.only(top: 1),
                   alignment: Alignment.center,
                   child: ListTile(
                       subtitle: Text(widget.songList[widget.index].artist ??

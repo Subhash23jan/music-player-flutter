@@ -18,23 +18,21 @@ class _PermissionHandlerState extends State<PermissionHandler> {
     super.initState();
     getPermission();
   }
-  getPermission() async {
+   getPermission() async {
     var result=await Permission.storage.request();
     if(result.isGranted){
       if(context.mounted) {
-        return Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomePage(),));
+        return  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomePage(),));
       }
-    }else{
-      setState(() {
-        isChecked=true;
-      });
+    }else {
+      return getPermission();
     }
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: isChecked?Center(
+      body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -42,13 +40,13 @@ class _PermissionHandlerState extends State<PermissionHandler> {
             const Text("To operate we need a access to your storage ",style: TextStyle(color: Colors.white),),
             const SizedBox(height: 25,),
             ElevatedButton(onPressed: (){
-               getPermission();
+               return getPermission();
             },
                 style: ElevatedButton.styleFrom(elevation: 15,shadowColor: Colors.white,backgroundColor: Colors.white54),
                 child:const Text("Give Permission",style: TextStyle(color: Colors.white),)),
           ],
         ),
-      ):const Center(child: CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,),),
+      )
     );
   }
 }

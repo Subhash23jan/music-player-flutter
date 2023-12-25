@@ -61,19 +61,24 @@ class DataBaseHelper {
   }
   Future<void>addToRecent(Favourites songModel)async{
     Database db = await getDatabase();
-    int id=songModel.getMap['_id'];
-    print(id);
+    int? id=songModel.getMap['_id'];
+    if (kDebugMode) {
+      print(id);
+    }
     try {
-      db.execute('''
+      if(id!=null) {
+        db.execute('''
     DELETE FROM recentListened WHERE _id = $id;
   ''');
+      }
       if (kDebugMode) {
         print("deleted");
       }
     } catch (e) {
-      print('Error deleting row: $e');
+      if (kDebugMode) {
+        print('Error deleting row: $e');
+      }
     }
-
     db.insert('recentListened',songModel.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

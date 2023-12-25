@@ -31,7 +31,7 @@ Widget favouriteSong(int index,OnAudioQuery audioQuery){
         ),),
         title:Padding(
           padding: const EdgeInsets.only(left: 20),
-          child: Text(SongsManager.favouriteSongs[index].displayName,style:GoogleFonts.manrope(color: Colors.white70,fontSize: 15.5,fontWeight: FontWeight.w600),),
+          child: Text(SongsManager.favouriteSongs[index].title,style:GoogleFonts.manrope(color: Colors.white70,fontSize: 15.5,fontWeight: FontWeight.w600),),
         ),
         subtitle:Padding(
           padding: const EdgeInsets.only(left: 20),
