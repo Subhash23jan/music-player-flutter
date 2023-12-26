@@ -6,14 +6,14 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
-class AllSongs extends StatefulWidget {
-  const AllSongs({super.key});
+class OtherSongs extends StatefulWidget {
+  const OtherSongs({super.key});
 
   @override
-  State<AllSongs> createState() => _AllSongsState();
+  State<OtherSongs> createState() => _OtherSongsState();
 }
 
-class _AllSongsState extends State<AllSongs> {
+class _OtherSongsState extends State<OtherSongs> {
   final OnAudioQuery audioQuery = OnAudioQuery();
   List<SongModel> songs = [];
   var permission=false;
@@ -45,7 +45,7 @@ class _AllSongsState extends State<AllSongs> {
         shadowColor: Colors.cyanAccent,
         scrolledUnderElevation: 15,
         leading:  Container(
-          alignment: Alignment.center,
+            alignment: Alignment.center,
             margin: const EdgeInsets.only(left: 12),
             child: Row(
               children: [
@@ -56,11 +56,11 @@ class _AllSongsState extends State<AllSongs> {
                     });
                   },
                   child: Row(
-                  children: [
-                  Text(makeAsc?"ASC":"DESC",style: GoogleFonts.manrope(color: Colors.red,fontSize: 15.5,fontWeight: FontWeight.bold),),
-                  Icon(makeAsc?Icons.arrow_upward:CupertinoIcons.down_arrow,color: Colors.white,size: 18,),
-          ],
-        ),
+                    children: [
+                      Text(makeAsc?"ASC":"DESC",style: GoogleFonts.manrope(color: Colors.red,fontSize: 15.5,fontWeight: FontWeight.bold),),
+                      Icon(makeAsc?Icons.arrow_upward:CupertinoIcons.down_arrow,color: Colors.white,size: 18,),
+                    ],
+                  ),
                 ),
                 Container(
                     height: 35,

@@ -42,7 +42,6 @@ class _PlaySongState extends State<PlaySong> {
 
   Future<void> playSongFromUri(BuildContext context) async {
     SongModel song = Provider.of<SongsProvider>(context, listen: false).currentSong;
-    SongsManager.recentListens.add(song);
     _dataBaseHelper.addToRecent(Favourites(song.getMap));
     await _audioPlayer.setUrl(song.uri ?? "");
     _audioPlayer.play();
@@ -245,7 +244,7 @@ class _PlaySongState extends State<PlaySong> {
                       print(
                           "After updateCurrentSong: ${songsProvider.currentSong.displayName}");
                       _audioPlayer.dispose();
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PlaySong(audioQuery: widget.audioQuery, songList: widget.songList, index: widget.index+1),));
+                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PlaySong(audioQuery: widget.audioQuery, songList: widget.songList, index: widget.index+1),));
                       // songsProvider.updateCurrentSong(widget.songList[widget.index+1]);
                       print("clicked");
                     },

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:music_player_demo/main.dart';
+import 'package:music_player_demo/pages/main_body.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'home_page.dart';
+import '../MainPages/home_page.dart';
 class PermissionHandler extends StatefulWidget {
   const PermissionHandler({super.key});
 
@@ -22,7 +23,7 @@ class _PermissionHandlerState extends State<PermissionHandler> {
     var result=await Permission.storage.request();
     if(result.isGranted){
       if(context.mounted) {
-        return  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomePage(),));
+        return  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MainBodyPage(index: 0,),));
       }
     }else {
       return getPermission();
@@ -30,20 +31,14 @@ class _PermissionHandlerState extends State<PermissionHandler> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.black,
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child:Stack(
+          alignment: Alignment.center,
           children: [
-            const Text("To operate we need a access to your storage ",style: TextStyle(color: Colors.white),),
-            const SizedBox(height: 25,),
-            ElevatedButton(onPressed: (){
-               return getPermission();
-            },
-                style: ElevatedButton.styleFrom(elevation: 15,shadowColor: Colors.white,backgroundColor: Colors.white54),
-                child:const Text("Give Permission",style: TextStyle(color: Colors.white),)),
+            Text("wait, it's updating!!",style: TextStyle(color: Colors.white),),
+            CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,)
           ],
         ),
       )
