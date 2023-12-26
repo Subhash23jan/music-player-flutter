@@ -34,7 +34,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor:const Color(0x100850FF),
+      backgroundColor:Colors.black,
       body: SingleChildScrollView(
         child: Column(
           children: [

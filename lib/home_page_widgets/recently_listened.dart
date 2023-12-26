@@ -4,29 +4,46 @@ import 'package:music_player_demo/constants/songs_manager.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 Widget recentPlays(BuildContext context,int index,OnAudioQuery audioQuery){
   return Container(
+    alignment: Alignment.center,
     margin: const EdgeInsets.only(right: 18),
-    height: MediaQuery.sizeOf(context).height*0.4,
-    width: MediaQuery.sizeOf(context).width*0.8,
+    height: MediaQuery.sizeOf(context).height*0.44,
+    width: MediaQuery.sizeOf(context).width*0.5,
     decoration: BoxDecoration(
       color: Colors.black,
       borderRadius: BorderRadius.circular(12),
     ),
-    child:  Stack(
-      alignment: Alignment.center,
+    child:  Column(
       children: [
-        QueryArtworkWidget(
-          controller: audioQuery,
-          artworkBorder: BorderRadius.circular(18),
-          artworkHeight: MediaQuery.sizeOf(context).height * 0.8,
-          artworkWidth: MediaQuery.of(context).size.width * 0.8,
-          artworkFit: BoxFit.cover,
-          id: SongsManager.recentListens[index].id,
-          type: ArtworkType.AUDIO,
+        Container(
+          height:100,
+          width: MediaQuery.sizeOf(context).width*0.5,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                  color: Colors.white,
+                  width: 1.9
+              )
+          ),
+          child: QueryArtworkWidget(
+            controller: audioQuery,
+            artworkFit: BoxFit.cover,
+            artworkBorder: BorderRadius.circular(20),
+            id: SongsManager.recentListens[index].id,
+            type: ArtworkType.AUDIO,
+            quality:100,
+          ),
         ),
-        Align(
+        const SizedBox(height: 15,),
+        Container(
           alignment: Alignment.center,
-          child: Text(SongsManager.recentListens[index].title,style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 18),),
-        ),
+            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+            width: MediaQuery.sizeOf(context).width*0.48,
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color:Colors.white10,
+            ),
+            child: Text(SongsManager.recentListens[index].title,style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12),overflow:TextOverflow.ellipsis,maxLines: 1,)),
       ],
     ),
   );

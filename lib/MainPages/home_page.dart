@@ -8,6 +8,7 @@ import 'package:music_player_demo/Sqlfite/database_helper.dart';
 import 'package:music_player_demo/constants/songs_manager.dart';
 import 'package:music_player_demo/pages/playlist_page.dart';
 import 'package:music_player_demo/play_song/play_songs.dart';
+import 'package:music_player_demo/songs/other_songs.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -62,10 +63,10 @@ class _HomePageState extends State<HomePage> {
    );
  }
  void initFavourites() async {
-    await getFavourites();
+    await getRecents();
   }
-  getFavourites() async {
-    await _dataBaseHelper.getRecent();
+  getRecents() async {
+    SongsManager.recentListens=await _dataBaseHelper.getRecent();
     if (kDebugMode) {
       print(SongsManager.recentListens.length);
     }
@@ -73,38 +74,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
+    getRecents();
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: index,
-        onTap: (value) {
-          setState(() {
-            index=value;
-          });
-        },
-        enableFeedback: false,
-        showUnselectedLabels: true,
-        elevation: 18,
-        unselectedFontSize: 13,
-        selectedFontSize: 14.5,
-        unselectedIconTheme: const IconThemeData(color: Colors.white70),
-        selectedLabelStyle: GoogleFonts.shortStack(color:Colors.cyan.shade900, fontWeight: FontWeight.bold),
-        unselectedLabelStyle: GoogleFonts.shortStack(color: Colors.white70,fontWeight: FontWeight.bold),
-        unselectedItemColor: Colors.red,
-        useLegacyColorScheme: false,
-        items:  [
-          getBottomItem(const Icon(CupertinoIcons.home),"HOME" ),
-          getBottomItem(const Icon(CupertinoIcons.search),"SEARCH" ),
-          getBottomItem(const Icon(CupertinoIcons.heart),"FAVOURITES" ),
-          getBottomItem(const Icon(Icons.stacked_line_chart),"STATS" ),
-        ],
-        backgroundColor:Colors.grey.shade900,
-      ),
       backgroundColor:Colors.black,
       appBar:AppBar(
-        backgroundColor: GlobalVariables.appBarColor,
+        backgroundColor: Colors.lightBlue.shade900,
         toolbarHeight: kToolbarHeight+5,
         elevation: 18,
         shadowColor: Colors.white24,
@@ -134,30 +109,30 @@ class _HomePageState extends State<HomePage> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(18),
-                          color: Colors.grey
+                          gradient: GlobalVariables.buttonGradient
                       ),
                       child:  Text("Music",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                     ),
                   ),
-                  Container(
-                    width: 90,
-                    height: 35,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        color: Colors.grey
+                  GestureDetector(
+                    onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OtherSongs(),)),
+                    child: Container(
+                      width: 90,
+                      height: 35,
+                      alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            gradient: GlobalVariables.buttonGradient
+                        ),
+                      child:  Text("Others",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                     ),
-                    child:  Text("Podcasts",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                   ),
                 ],
               ),
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(25),
-              child: CircleAvatar(
-                radius: 21,
-                child: Image.network("https://qph.cf2.quoracdn.net/main-qimg-7a677dd3e89f2ac85ac5fd0d9993d77b-lq"),
-              ),
+              child: Image.network("https://www.hindustantimes.com/ht-img/img/2023/08/26/1600x900/salaar_1693043688109_1693043688289.jpeg",fit: BoxFit.cover,width: 41,height: 41,),
             )
           ],
         ),
@@ -169,11 +144,11 @@ class _HomePageState extends State<HomePage> {
           child:  Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-          Container(
+              Container(
           margin: const EdgeInsets.only(top: 18),
-          height: 150,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          alignment: Alignment.center,
+          height: 200,child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ShaderMask(
@@ -189,19 +164,27 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              Container(
-                height: 110,
-                margin: const EdgeInsets.only(left: 5),
-                child: buildPickedSongs(),
+              const SizedBox(height: 15,),
+              SizedBox(
+                height: 145,
+                child: SongsManager.songsList.isEmpty?const Center(
+                  child:Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Text("wait, it's updating!!",style: TextStyle(color: Colors.white),),
+                      CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,)
+                    ],
+                  ),
+                ):buildPickedSongs(),
               ),
             ],
           ),
         ),
-              Container(
-                  margin: const EdgeInsets.only(top: 18),
-                  height:150,
+              const SizedBox(height: 15,),
+              SizedBox(
+                  height:200,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ShaderMask(
@@ -215,8 +198,9 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                                 fontSize: 17.5,fontWeight: FontWeight.w500),
                           )),
+                      const SizedBox(height: 15,),
                       SizedBox(
-                        height: 110,
+                        height: 155,
                         child: SongsManager.recentListens.isNotEmpty?ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount:SongsManager.recentListens.length,
@@ -233,21 +217,21 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   )),
+              const SizedBox(height: 15,),
               Container(
-                  margin: const EdgeInsets.only(top: 18),
+                margin: const EdgeInsets.only(bottom: 15),
                   height:145,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ShaderMask(shaderCallback:(bounds) {
                         return GlobalVariables.getLineGradient().createShader(bounds);
                       },child: Text(" Collections",style: GoogleFonts.manrope(color: Colors.white,fontSize: 17.5,fontWeight: FontWeight.w500),)),
                       const SizedBox(
-                        height: 8,
+                        height: 18,
                       ),
                       Expanded(
-
                         child: ListView(
                           padding: const EdgeInsets.only(right: 10),
                           scrollDirection: Axis.horizontal,
@@ -266,8 +250,8 @@ class _HomePageState extends State<HomePage> {
                                   decoration: BoxDecoration(
                                       gradient:  LinearGradient(
                                           colors: [
-                                            Colors.blue,
-                                            Colors.red,
+                                            Colors.cyanAccent,
+                                            Colors.lightBlue,
                                             Colors.cyan.shade800
                                           ],
                                           begin: Alignment.topLeft,
@@ -314,9 +298,9 @@ class _HomePageState extends State<HomePage> {
                                     height: 100,
                                     width: 150,
                                     decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
+                                        gradient:  const LinearGradient(
                                             colors: [
-                                              Color.fromARGB(255, 97, 207, 222),
+                                              Colors.pinkAccent,
                                               Color.fromARGB(255, 213, 56, 208),
                                               Color.fromARGB(255, 228, 68, 161),
                                               Colors.pinkAccent
@@ -567,14 +551,13 @@ class _HomePageState extends State<HomePage> {
     try {
       return ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 5,
+        itemCount: 10,
         shrinkWrap: true,
         itemBuilder: (context, index1) {
-          int index = Random().nextInt(SongsManager.songsList.length + 1);
+          int index = Random().nextInt(SongsManager.songsList.length - 1);
           return GestureDetector(
             onTap: () {
-              Provider.of<SongsProvider>(context, listen: false)
-                  .updateCurrentSong(SongsManager.songsList[index]);
+              Provider.of<SongsProvider>(context, listen: false).updateCurrentSong(SongsManager.songsList[index]);
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) {
                   return PlaySong(
@@ -590,7 +573,9 @@ class _HomePageState extends State<HomePage> {
         },
       );
     } catch (error) {
-      print("Error: $error");
+      if (kDebugMode) {
+        print("Error: $error");
+      }
       return const Center(
         child: Text(
           "Wait some time something went wrong!!",
@@ -602,17 +587,5 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-  }
-
-  BottomNavigationBarItem getBottomItem(Icon icon,String text){
-    return BottomNavigationBarItem(icon:
-    ShaderMask(shaderCallback:(bounds) {
-      return const LinearGradient(colors: [
-        Colors.cyan,
-        Colors.cyanAccent,
-        Colors.cyan,
-        Colors.cyanAccent,
-      ], begin: Alignment.topLeft, end: Alignment.bottomRight).createShader(bounds);
-    },child:icon) , label:text);
   }
 }

@@ -7,6 +7,13 @@ import 'package:path/path.dart';
 
 class DataBaseHelper {
   static Database? _database;
+  static final DataBaseHelper _instance = DataBaseHelper._internal();
+
+  factory DataBaseHelper() {
+    return _instance;
+  }
+
+  DataBaseHelper._internal();
 
   Future<Database> getDatabase() async {
     if (_database != null) return _database!;

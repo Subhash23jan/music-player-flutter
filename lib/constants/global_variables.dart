@@ -21,5 +21,11 @@ class GlobalVariables {
     Color.fromARGB(255, 14, 78, 190),
     Color.fromARGB(255, 30, 121, 138)
   ], begin: Alignment.topLeft, end: Alignment.bottomRight);
-
+ static String trimSongName(String str)
+ {
+     if(str.length<=8) {
+       return str;
+     }
+     return str.substring(5);
+ }
 }
