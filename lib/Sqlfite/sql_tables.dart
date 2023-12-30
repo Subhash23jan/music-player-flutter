@@ -1,11 +1,12 @@
 class Tables{
   String userTable=''' create table if not exists user(
           email text,
-          password text,
-      )   ''';
+          password text
+      );   ''';
 
   String recentListenedTable=''' CREATE TABLE IF NOT EXISTS recentListened (
-    _id INTEGER PRIMARY KEY,
+     dataId INTEGER PRIMARY KEY AUTOINCREMENT,
+    _id INTEGER,
     _data TEXT,
     _uri TEXT,
     _display_name TEXT,

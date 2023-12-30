@@ -14,11 +14,19 @@ class PermissionHandler extends StatefulWidget {
 class _PermissionHandlerState extends State<PermissionHandler> {
   bool isChecked=false;
   @override
-  void initState() {
+  void initState()  {
     // TODO: implement initState
     super.initState();
+    checkGrants();
     getPermission();
+
   }
+  checkGrants() async {
+    if(await Permission.storage.isGranted){
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MainBodyPage(index: 0,),));
+    }
+  }
+
    getPermission() async {
     var result=await Permission.storage.request();
     if(result.isGranted){
