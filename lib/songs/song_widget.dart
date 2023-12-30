@@ -46,7 +46,7 @@ Widget songWidget(BuildContext context,List<SongModel>songList,int index, OnAudi
     ),
     title:Padding(
       padding: const EdgeInsets.only(left: 1),
-      child: Text(songList[index].displayName,style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.w700),maxLines: 1,
+      child: Text(songList[index].title,style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 13.5,fontWeight: FontWeight.w700),maxLines: 1,
         overflow: TextOverflow.ellipsis,),
     ),
     subtitle:Padding(

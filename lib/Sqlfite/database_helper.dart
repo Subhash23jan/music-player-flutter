@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:music_player_demo/Sqlfite/sql_tables.dart';
 import 'package:music_player_demo/models/favourites_model.dart';
+import 'package:music_player_demo/models/recent_listens.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -56,14 +57,14 @@ class DataBaseHelper {
     Database db = await getDatabase();
     db.insert('favouriteSongs',songModel.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
   }
-  Future<List<SongModel>> getRecent() async {
+  Future<List<RecentSong>> getRecent() async {
     try {
       Database db = await getDatabase();
-      List<Map<String, Object?>>? maps = await db.query('recentListened');
-      return List.generate(maps.length, (index) => SongModel(maps[index]));
+      List<Map<String, Object?>>? maps = await db.query('recentListened',orderBy: 'dataId DESC',distinct: true,);
+      return List.generate(maps.length, (index) => RecentSong(maps[index]));
     } catch (e) {
       print('Error getting favourites: $e');
-      return []; // Return an empty list or handle the error according to your needs
+      return [];
     }
   }
   Future<void>addToRecent(Favourites songModel)async{
