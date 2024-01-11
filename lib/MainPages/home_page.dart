@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -32,7 +33,9 @@ class _HomePageState extends State<HomePage> {
   bool permission = false;
   int index = 0;
   final global = GlobalVariables();
+  List<IconData>iconsList=[CupertinoIcons.music_note_2,CupertinoIcons.music_note_list];
   final DataBaseHelper _dataBaseHelper = DataBaseHelper();
+  int iconIndex=0;
   final ScrollController _controller = ScrollController(
     keepScrollOffset: true,
   );
@@ -40,7 +43,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    print("Subhash");
   }
 
   void getSongList() async {
@@ -146,12 +148,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: Image.network(
-                "https://www.hindustantimes.com/ht-img/img/2023/08/26/1600x900/salaar_1693043688109_1693043688289.jpeg",
-                fit: BoxFit.cover, width: 41, height: 41,),
-            )
+            const Icon(CupertinoIcons.music_note_list,color: Colors.white,size: 30,)
           ],
         ),
         centerTitle: false,
@@ -262,6 +259,7 @@ class _HomePageState extends State<HomePage> {
                                   GestureDetector(
                                       onTap: () {
                                         //   List<SongModel>songs = SongsManager.recentListens.reversed.toList();
+
                                         Provider.of<SongsProvider>(
                                             context, listen: false)
                                             .updateCurrentSong(recentSongs[index]);
@@ -568,7 +566,7 @@ class _HomePageState extends State<HomePage> {
               ShaderMask(shaderCallback: (bounds) {
                 return GlobalVariables.getLineGradient().createShader(bounds);
               },
-                  child: Text(" Top 10 Artists", style: GoogleFonts.manrope(
+                  child: Text(" Top 10 Tracks Of You!!", style: GoogleFonts.manrope(
                       color: Colors.white,
                       fontSize: 17.5,
                       fontWeight: FontWeight.w500),)),

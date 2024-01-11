@@ -55,49 +55,43 @@ class DataBaseHelper {
   }
   Future<void>addFavourites(Favourites songModel)async{
     Database db = await getDatabase();
-    db.insert('favouriteSongs',songModel.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
+    db.insert('favouriteSongs',songModel.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
+  }
+  Future<void> removeFromFavourites(int id) async {
+    Database db = await getDatabase();
+    await db.rawDelete(
+      'DELETE FROM favouriteSongs WHERE _id = ?',
+      [id],
+    );
   }
   Future<List<RecentSong>> getRecent() async {
     try {
       Database db = await getDatabase();
-      List<Map<String, Object?>>? maps = await db.query('recentListened',orderBy: 'dataId DESC',distinct: true,);
+      List<Map<String, Object?>>? maps = await db.query('recentListened',orderBy: 'dataId DESC');
       return List.generate(maps.length, (index) => RecentSong(maps[index]));
     } catch (e) {
       print('Error getting favourites: $e');
       return [];
     }
   }
-  Future<void>addToRecent(Favourites songModel)async{
+  Future<void>addToRecent(RecentSong songModel)async{
     Database db = await getDatabase();
-    int? id=songModel.getMap['_id'];
-    if (kDebugMode) {
-      print(id);
-    }
-    try {
-      if(id!=null) {
-        db.execute('''
-    DELETE FROM recentListened WHERE _id = $id;
-  ''');
-      }
-      if (kDebugMode) {
-        print("deleted");
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error deleting row: $e');
-      }
-    }
     db.insert('recentListened',songModel.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
   }
+  Future<bool> isPresentInFavourites(int id) async {
+    Database db = await getDatabase(); // Assuming getDatabase() returns a synchronous Database.
+
+    List<Map<String, dynamic>> result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM favouriteSongs WHERE _id = ?',
+      [id],
+    );
+
+    int count = result.isNotEmpty ? result[0]['count'] : 0;
+    print("subhash  $count");
+    return count>0;
+  }
+
+
+
 }
 
-// Example usage:
-void main() async {
-  try {
-    DataBaseHelper dbHelper = DataBaseHelper();
-    List<SongModel> favourites = await dbHelper.getFavourites();
-    print('Favourite songs: $favourites');
-  } catch (e) {
-    print('An error occurred: $e');
-  }
-}

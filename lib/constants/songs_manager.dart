@@ -6,5 +6,5 @@ class SongsManager{
   static List<SongModel>songsList=[];
   static List<SongModel>favouriteSongs=[];
   static List<RecentSong>recentListens=[];
-
+  static bool  isInFavourites=false;
 }

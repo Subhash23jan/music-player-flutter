@@ -6,7 +6,7 @@ Widget recentPlays(BuildContext context,int index,OnAudioQuery audioQuery){
   return Container(
     alignment: Alignment.center,
     margin: const EdgeInsets.only(right: 18),
-    height: MediaQuery.sizeOf(context).height*0.44,
+    height: MediaQuery.sizeOf(context).height*0.5,
     width: MediaQuery.sizeOf(context).width*0.5,
     decoration: BoxDecoration(
       color: Colors.black,
