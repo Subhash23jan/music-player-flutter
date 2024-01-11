@@ -5,7 +5,6 @@ class RecentSong extends SongModel{
   int ? dataId;
   Map<String, dynamic> toMap() {
     return {
-      'dataId':dataId??0,
       "_id": id,
       "_data": data,
       "_uri": uri,
@@ -34,5 +33,4 @@ class RecentSong extends SongModel{
       "is_ringtone": isRingtone,
     };
   }
-
 }

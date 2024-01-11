@@ -6,6 +6,8 @@ import '../Sqlfite/database_helper.dart';
 
 class SongsProvider extends ChangeNotifier {
   late SongModel _songModel;
+  Duration currentPosition=const Duration();
+  Duration songDuration=const Duration(seconds: 60);
   final DataBaseHelper _dataBaseHelper = DataBaseHelper();
   List<RecentSong>recentListens=[];
 
@@ -22,5 +24,14 @@ class SongsProvider extends ChangeNotifier {
       recentListens=list;
       notifyListeners();
     }
+  }
+  void addDuration(Duration duration){
+    print(duration);
+    songDuration=duration;
+    notifyListeners();
+  }
+  void addCurrentPosition(Duration duration){
+    currentPosition=duration;
+    notifyListeners();
   }
 }
