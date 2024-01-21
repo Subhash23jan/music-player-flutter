@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:music_player_demo/MainPages/albums_page.dart';
 import 'package:music_player_demo/Sqlfite/database_helper.dart';
 import 'package:music_player_demo/constants/songs_manager.dart';
 import 'package:music_player_demo/models/recent_listens.dart';
@@ -129,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const OtherSongs(),)),
+                      builder: (context) => const AlbumsPage(),)),
                     child: Container(
                       width: 90,
                       height: 35,
@@ -138,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(18),
                           gradient: GlobalVariables.buttonGradient
                       ),
-                      child: Text("Others", style: GoogleFonts.aBeeZee(
+                      child: Text("Albums", style: GoogleFonts.aBeeZee(
                           color: Colors.white,
                           fontSize: 13.5,
                           fontWeight: FontWeight.bold),
@@ -162,7 +163,7 @@ class _HomePageState extends State<HomePage> {
               Container(
                 margin: const EdgeInsets.only(top: 18),
                 alignment: Alignment.center,
-                height: 200, child: Column(
+                height: 220, child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -182,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 15,),
                   SizedBox(
-                    height: 145,
+                    height: 165,
                     child: FutureBuilder<List<SongModel>>(
                       future: audioQuery.querySongs(
                         uriType: UriType.EXTERNAL,
@@ -226,7 +227,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 15,),
               SizedBox(
-                  height: 200,
+                  height: 220,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                           List<RecentSong>recentSongs=songProvider.recentListens;
                           print(recentSongs.length);
                           return SizedBox(
-                            height: 155,
+                            height: 175,
                             child: recentSongs.isNotEmpty
                                 ? ListView.builder(
                               scrollDirection: Axis.horizontal,
@@ -259,7 +260,6 @@ class _HomePageState extends State<HomePage> {
                                   GestureDetector(
                                       onTap: () {
                                         //   List<SongModel>songs = SongsManager.recentListens.reversed.toList();
-
                                         Provider.of<SongsProvider>(
                                             context, listen: false)
                                             .updateCurrentSong(recentSongs[index]);
@@ -570,12 +570,8 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.white,
                       fontSize: 17.5,
                       fontWeight: FontWeight.w500),)),
-              FutureBuilder<List<SongModel>>(
-                future: audioQuery.querySongs(
-                  uriType: UriType.EXTERNAL,
-                  sortType: SongSortType.ALBUM,
-                  ignoreCase: true,
-                ),
+              FutureBuilder<List<RecentSong>>(
+                future:DataBaseHelper().getTopTracks(),
                 builder: (context, item) {
                   // Display error, if any.
                   if (item.hasError) {
@@ -590,16 +586,13 @@ class _HomePageState extends State<HomePage> {
 
                   // 'Library' is empty.
                   if (item.data!.isEmpty) return const Text("Nothing found!");
-
-                  // You can use [item.data!] direct or you can create a:
-                  SongsManager.songsList = item.data!;
                   return ListView.builder(
-                    itemCount: 10,
+                    itemCount:item.data!.length,
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return item.data![index].artist != "unknown" ? topArtists(
-                          context, item.data![index]) : const SizedBox();
+                      return topTracks(
+                          context, item.data![index]);
                     },
                   );
                 },

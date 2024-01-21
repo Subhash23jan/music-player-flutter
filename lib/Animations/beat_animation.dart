@@ -15,22 +15,18 @@ class _BeatButtonState extends State<BeatButton> with SingleTickerProviderStateM
   late Animation<Color?> _colorAnimation;
 
   List<Color> colorList = [
-    Colors.blue,
-    Colors.red,
-    Colors.green,
-    Colors.yellow,
-    Colors.orange,
-    Colors.purple,
-    Colors.teal,
-    Colors.pink,
-    Colors.indigo,
-    Colors.cyan,
-    Colors.yellowAccent,
+    Colors.black,
+    Colors.white,
+    Colors.grey,
+    Colors.white54,
+    Colors.black12,Colors.white60,Colors.white70,Colors.deepOrange,
   ];
+
 
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 250),
@@ -42,7 +38,6 @@ class _BeatButtonState extends State<BeatButton> with SingleTickerProviderStateM
     ).animate(_controller);
 
     _controller.addListener(() {
-      // Change color at each iteration
       int randomIndex = Random().nextInt(colorList.length);
       _colorAnimation = ColorTween(
         begin: _colorAnimation.value,
@@ -57,16 +52,27 @@ class _BeatButtonState extends State<BeatButton> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Handle button tap
+        // Generate a random duration between 250ms and 1000ms (1 second)
+        final randomDuration = Duration(milliseconds: Random().nextInt(1000) + 100);
+
+        // Reset the controller with the new random duration
+        _controller.reset();
+        _controller.duration = randomDuration;
+
+        // Start the animation
+        _controller.forward();
       },
       child: AnimatedBuilder(
         animation: _colorAnimation,
         builder: (context, child) {
           return Container(
-            width: MediaQuery.of(context).size.width * 0.99,
+            width: MediaQuery.of(context).size.width * 0.70,
             height: MediaQuery.of(context).size.height * 0.45,
-            color: _colorAnimation.value,
-            child: Center(
+            decoration: BoxDecoration(
+              color: _colorAnimation.value,
+              borderRadius: BorderRadius.circular(60),
+            ),
+            child: const Center(
               child: Text(
                 'Play',
                 style: TextStyle(color: Colors.white),

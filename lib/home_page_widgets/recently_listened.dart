@@ -15,19 +15,21 @@ Widget recentPlays(BuildContext context,int index,OnAudioQuery audioQuery){
     child:  Column(
       children: [
         Container(
-          height:100,
+          height:120,
           width: MediaQuery.sizeOf(context).width*0.5,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(25),
+              color:Colors.white10,
               border: Border.all(
-                  color: Colors.white,
-                  width: 1.9
+                  color: Colors.cyanAccent,
+                  width: .1
               )
           ),
           child: QueryArtworkWidget(
             controller: audioQuery,
             artworkFit: BoxFit.cover,
-            artworkBorder: BorderRadius.circular(20),
+            artworkQuality: FilterQuality.high,
+            artworkBorder:  BorderRadius.circular(25),
             id: SongsManager.recentListens[index].id,
             type: ArtworkType.AUDIO,
             quality:100,

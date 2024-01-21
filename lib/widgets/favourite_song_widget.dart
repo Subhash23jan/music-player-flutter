@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../Sqlfite/database_helper.dart';
 import '../constants/Global_Variables.dart';
 import '../constants/songs_manager.dart';
 
-Widget favouriteSong(int index,OnAudioQuery audioQuery){
+Widget favouriteSong(int index,OnAudioQuery audioQuery,BuildContext context){
   return Container(
     margin: const EdgeInsets.only(bottom: 15),
     child: ListTile(
@@ -31,14 +32,17 @@ Widget favouriteSong(int index,OnAudioQuery audioQuery){
         ),),
         title:Padding(
           padding: const EdgeInsets.only(left: 20),
-          child: Text(SongsManager.favouriteSongs[index].title,style:GoogleFonts.manrope(color: Colors.white70,fontSize: 15.5,fontWeight: FontWeight.w600),),
+          child: Text(SongsManager.favouriteSongs[index].title,style:GoogleFonts.manrope(color: Colors.white70,fontSize: 15.5,fontWeight: FontWeight.w600),overflow: TextOverflow.ellipsis,maxLines: 2,),
         ),
         subtitle:Padding(
           padding: const EdgeInsets.only(left: 20),
           child: Text(SongsManager.favouriteSongs[index].artist??"unknown",style: GoogleFonts.manrope(color: Colors.white38,fontSize: 12.5),),
         ),
         trailing:  IconButton(
-            onPressed: (){},
+            onPressed: (){
+              DataBaseHelper dbhelper=DataBaseHelper();
+              dbhelper.removeFromFavourites(SongsManager.favouriteSongs[index].id);
+            },
             style: const ButtonStyle(),
             icon: const Icon(Icons.favorite_outlined,color:Colors.redAccent,size: 27,))
     ),

@@ -1,14 +1,16 @@
 
-
-
 import 'package:flutter/material.dart';
 import 'package:music_player_demo/pages/permissionHandlerPage.dart';
 import 'package:music_player_demo/provider/play_song_provider.dart';
 import 'package:music_player_demo/provider/songs_provider.dart';
 import 'package:provider/provider.dart';
 
+
+
+
 void main() {
   Provider.debugCheckInvalidValueType = null;
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => SongsProvider(),),

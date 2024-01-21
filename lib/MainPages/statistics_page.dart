@@ -9,6 +9,15 @@ class StatisticsPage extends StatefulWidget {
 class _StatisticsPageState extends State<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Music Statistics"),
+          toolbarHeight: kToolbarHeight,
+        ),
+        body: const Column(
+            children: [
+
+        ]),
+      );
   }
 }

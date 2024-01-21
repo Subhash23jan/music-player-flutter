@@ -58,7 +58,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                     style: ListTileStyle.drawer,
                     selected: true,
                     selectedColor: GlobalVariables.appBarColor,
-                    title:Text("Best of 90's",style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15.5,fontWeight: FontWeight.w700),),
+                    title:Text("Best for Yours",style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15.5,fontWeight: FontWeight.w700),),
                     subtitle:ShaderMask(shaderCallback:(bounds) {
                       return GlobalVariables.getLineGradient().createShader(bounds);
                     },child: Text("6.8 hour listened activity",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12.5,fontWeight: FontWeight.w500),)),

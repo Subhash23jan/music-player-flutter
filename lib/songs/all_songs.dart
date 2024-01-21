@@ -20,9 +20,6 @@ class _AllSongsState extends State<AllSongs> {
   int sortingIndex=0;
   bool makeAsc=true;
   bool sorting=false;
-
-
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -38,7 +35,7 @@ class _AllSongsState extends State<AllSongs> {
       backgroundColor: const Color(0x0B0642FF),
       appBar: AppBar(
         backgroundColor:Colors.black,
-        toolbarHeight: kToolbarHeight+25,
+        toolbarHeight: kToolbarHeight+55,
         centerTitle: false,
         leadingWidth: 145,
         elevation: 2,
