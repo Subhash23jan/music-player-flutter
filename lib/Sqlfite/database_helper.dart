@@ -29,12 +29,13 @@ class DataBaseHelper {
       return await openDatabase(
         path,
         version: 1,
-        onCreate: (db, version) {
-          db.execute(Tables().userTable);
-          db.execute(Tables().recentListenedTable);
-          db.execute(Tables().playListsTable);
-          db.execute(Tables().customPlaylists);
-          db.execute(Tables().favouriteSongsTable);
+        onCreate: (db, version) async {
+          await db.execute(Tables.userTable);
+          await db.execute(Tables.recentListenedTable);
+          await db.execute(Tables.playListsTable);
+          await db.execute(Tables.customPlaylists);
+          await db.execute(Tables.favouriteSongsTable);
+          await db.execute(Tables.allSongsTable);
         },
       );
     } catch (e) {
@@ -46,7 +47,7 @@ class DataBaseHelper {
   Future<List<SongModel>> getFavourites() async {
     try {
       Database db = await getDatabase();
-      List<Map<String, Object?>>? maps = await db.query('favouriteSongs');
+      List<Map<String, Object?>>? maps = await db.query(Tables.favouriteSongTableName);
       return List.generate(maps.length, (index) => SongModel(maps[index]));
     } catch (e) {
       print('Error getting favourites: $e');
@@ -55,34 +56,58 @@ class DataBaseHelper {
   }
   Future<void>addFavourites(Favourites songModel)async{
     Database db = await getDatabase();
-    db.insert('favouriteSongs',songModel.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
+    db.insert(Tables.favouriteSongTableName,songModel.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
   }
   Future<void> removeFromFavourites(int id) async {
     Database db = await getDatabase();
     await db.rawDelete(
-      'DELETE FROM favouriteSongs WHERE _id = ?',
+      'DELETE FROM ${Tables.favouriteSongTableName} WHERE _id = ?',
       [id],
     );
   }
+
   Future<List<RecentSong>> getRecent() async {
     try {
       Database db = await getDatabase();
-      List<Map<String, Object?>>? maps = await db.query('recentListened',orderBy: 'dataId DESC');
+      List<Map<String, Object?>>? maps = await db.query(Tables.recentSongTableName,orderBy: 'dataId DESC');
       return List.generate(maps.length, (index) => RecentSong(maps[index]));
     } catch (e) {
-      print('Error getting favourites: $e');
+      print('Error getting recent songs: $e');
       return [];
     }
   }
+  Future<List<RecentSong>> getTopTracks() async {
+    try {
+      Database db = await getDatabase();
+      List<Map<String, Object?>>? maps = await db.query(
+        Tables.recentSongTableName,
+        orderBy: 'listen_count DESC, dataId DESC',
+        groupBy: 'title',
+        columns: ['*', 'COUNT(*) as listen_count'],
+      );
+
+      return List.generate(maps.length, (index) {
+        // print(maps[index]);
+        return RecentSong(maps[index]);
+      });
+    } catch (e) {
+      print('Error getting top tracks: $e');
+      return [];
+    }
+  }
+
+
+
+
   Future<void>addToRecent(RecentSong songModel)async{
     Database db = await getDatabase();
-    db.insert('recentListened',songModel.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
+    db.insert(Tables.recentSongTableName,RecentSong(songModel.getMap).toMap());
   }
   Future<bool> isPresentInFavourites(int id) async {
     Database db = await getDatabase(); // Assuming getDatabase() returns a synchronous Database.
 
     List<Map<String, dynamic>> result = await db.rawQuery(
-      'SELECT COUNT(*) as count FROM favouriteSongs WHERE _id = ?',
+      'SELECT COUNT(*) as count FROM ${Tables.favouriteSongTableName} WHERE _id = ?',
       [id],
     );
 
@@ -90,7 +115,10 @@ class DataBaseHelper {
     print("subhash  $count");
     return count>0;
   }
-
+  Future<void> addSongToDatabase(SongModel songModel) async {
+    Database db = await getDatabase();
+    db.insert(Tables.allSongsTableName,RecentSong(songModel.getMap).toMap());
+  }
 
 
 }

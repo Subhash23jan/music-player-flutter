@@ -123,7 +123,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
               itemCount: SongsManager.favouriteSongs.length,
               physics:const ScrollPhysics(),
               itemBuilder: (context, index) {
-              return favouriteSong(index,audioQuery);
+              return favouriteSong(index,audioQuery,context);
             },)
           ],
         ),

@@ -45,7 +45,7 @@ class _PermissionHandlerState extends State<PermissionHandler> {
         child:Stack(
           alignment: Alignment.center,
           children: [
-            Text("wait, it's updating!!",style: TextStyle(color: Colors.white),),
+            Text("wait, it's updating!!",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),),
             CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,)
           ],
         ),
