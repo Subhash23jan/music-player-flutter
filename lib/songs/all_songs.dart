@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:music_player_demo/constants/songs_manager.dart';
 import 'package:music_player_demo/songs/song_widget.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -174,7 +175,7 @@ class _AllSongsState extends State<AllSongs> {
 
             // 'Library' is empty.
             if (item.data!.isEmpty) return const Text("Nothing found!");
-
+            SongsManager.songsList=item.data!;
             // You can use [item.data!] direct or you can create a:
             // List<SongModel> songs = item.data!;
             return ListView.builder(

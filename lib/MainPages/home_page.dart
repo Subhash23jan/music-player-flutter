@@ -9,7 +9,6 @@ import 'package:music_player_demo/MainPages/albums_page.dart';
 import 'package:music_player_demo/Sqlfite/database_helper.dart';
 import 'package:music_player_demo/constants/songs_manager.dart';
 import 'package:music_player_demo/models/recent_listens.dart';
-import 'package:music_player_demo/pages/playlist_page.dart';
 import 'package:music_player_demo/play_song/play_songs.dart';
 import 'package:music_player_demo/songs/other_songs.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -19,6 +18,7 @@ import '../constants/Global_Variables.dart';
 import '../home_page_widgets/picked_song_card.dart';
 import '../home_page_widgets/recently_listened.dart';
 import '../home_page_widgets/top_artists.dart';
+import '../pages/playlist_page.dart';
 import '../provider/songs_provider.dart';
 import '../songs/all_songs.dart';
 import 'favourites_page.dart';
@@ -58,8 +58,14 @@ class _HomePageState extends State<HomePage> {
           return Text(item.error.toString());
         }
         if (item.data == null) {
-          return const Center(child: CircularProgressIndicator(
-            color: Colors.white, strokeWidth: 2,));
+          return const  Center(
+            child:Stack(
+              alignment: Alignment.center,
+              children: [
+                Text("wait, it's updating!!",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),),
+                CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,)
+              ],
+            ),);
         }
         if (item.data!.isEmpty) return const Text("Nothing found!");
         SongsManager.songsList = item.data!;
@@ -332,13 +338,13 @@ class _HomePageState extends State<HomePage> {
                                     onTap: () =>
                                         Navigator.of(context).push(
                                             MaterialPageRoute(builder: (
-                                                context) => const PlaylistPage(),)),
+                                                context) => const SuggestionSongsPage(),)),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment
                                           .center,
                                       children: [
                                         Text(
-                                          "Best of the",
+                                          "Best songs for",
                                           style: GoogleFonts.manrope(
                                             color: Colors.white,
                                             fontSize: 17,
@@ -346,7 +352,7 @@ class _HomePageState extends State<HomePage> {
                                           textAlign: TextAlign.center,
                                         ),
                                         Text(
-                                          "90's",
+                                          "You!!",
                                           style: GoogleFonts.redHatMono(
                                             color: Colors.white,
                                             fontSize: 33,
@@ -608,21 +614,9 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(35)
           ),
           onPressed: () {
-            if (_controller.hasClients) {
-              if (kDebugMode) {
-                print("clicked");
-              }
-              final position = _controller.position.minScrollExtent;
-              print(position);
-              _controller.animateTo(
-                position,
-                duration: const Duration(seconds: 1),
-                curve: Curves.easeOut,
-              );
-            }
+            setState(() {});
           },
-          child: const Icon(
-            CupertinoIcons.arrow_up_to_line_alt, color: Colors.black,
+          child: const Icon(CupertinoIcons.refresh, color: Colors.black,
             size: 20,)),
     );
   }

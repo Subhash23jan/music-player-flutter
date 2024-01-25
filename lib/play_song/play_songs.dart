@@ -320,16 +320,18 @@ class _PlaySongState extends State<PlaySong> {
                             // Set the button color
                           ),),
                         IconButton(onPressed: () {
-                          print(
-                              "Before updateCurrentSong: ${songsProvider.currentSong.displayName}");
-                          songsProvider.updateCurrentSong(
-                              widget.songList[widget.index + 1]);
-                          print(
-                              "After updateCurrentSong: ${songsProvider.currentSong.displayName}");
-                          _audioPlayer.dispose();
-                         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PlaySong(audioQuery: widget.audioQuery, songList: widget.songList, index: widget.index+1),));
-                          // songsProvider.updateCurrentSong(widget.songList[widget.index+1]);
-                          print("clicked");
+                          if(widget.index<widget.songList.length-2){
+                            print(
+                                "Before updateCurrentSong: ${songsProvider.currentSong.displayName}");
+                            songsProvider.updateCurrentSong(
+                                widget.songList[widget.index + 1]);
+                            print(
+                                "After updateCurrentSong: ${songsProvider.currentSong.displayName}");
+                            _audioPlayer.dispose();
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PlaySong(audioQuery: widget.audioQuery, songList: widget.songList, index: widget.index+1),));
+                            // songsProvider.updateCurrentSong(widget.songList[widget.index+1]);
+                            print("clicked");
+                          }
                         },
                             icon: const Icon(CupertinoIcons.forward_end,
                               color: CupertinoColors.white, size: 30,)),

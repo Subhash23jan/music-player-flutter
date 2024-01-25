@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,6 +38,16 @@ class _FavouritesPageState extends State<FavouritesPage> {
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor:Colors.black,
+      floatingActionButton: FloatingActionButton.small(
+          elevation: 20,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(35)
+          ),
+          onPressed: () {
+            setState(() {});
+          },
+          child: const Icon(CupertinoIcons.refresh, color: Colors.black,
+            size: 20,)),
       body: SingleChildScrollView(
         child: Column(
           children: [

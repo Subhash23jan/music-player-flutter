@@ -1,18 +1,34 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:music_player_demo/Sqlfite/database_helper.dart';
+import 'package:music_player_demo/constants/songs_manager.dart';
 import 'package:music_player_demo/widgets/playlist_song_widgets.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/Global_Variables.dart';
 import '../play_song/play_songs.dart';
-class PlaylistPage extends StatefulWidget {
-  const PlaylistPage({super.key});
+import '../provider/songs_provider.dart';
+class SuggestionSongsPage extends StatefulWidget {
+  const SuggestionSongsPage({super.key});
 
   @override
-  State<PlaylistPage> createState() => _PlaylistPageState();
+  State<SuggestionSongsPage> createState() => _SuggestionSongsPageState();
 }
+class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
+  List<SongModel>songs=[];
+  OnAudioQuery audioQuery=OnAudioQuery();
+  DataBaseHelper dataBaseHelper=DataBaseHelper();
 
-class _PlaylistPageState extends State<PlaylistPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSuggestedSongs();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,30 +86,55 @@ class _PlaylistPageState extends State<PlaylistPage> {
                       shadowColor: MaterialStateProperty.all<Color>(Colors.white12),
                       // Set the button color
                     ),
-                    icon: Icon(CupertinoIcons.shuffle,color:Colors.yellow.shade800,size: 35,shadows: [
+                    icon: Icon(CupertinoIcons.shuffle,color:Colors.yellow.shade800,size: 35,shadows: const [
                     ],)),
-                IconButton(onPressed: (){},
+                IconButton(onPressed: (){
+                  Provider.of<SongsProvider>(
+                      context, listen: false)
+                      .updateCurrentSong(songs[0]);
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return PlaySong(
+                            audioQuery: audioQuery,
+                            songList:songs,
+                            index:0);
+                      },));
+                },
                     style:  ButtonStyle(
                       elevation: MaterialStateProperty.all<double>(15), // Set the elevation as needed
                       shadowColor: MaterialStateProperty.all<Color>(Colors.white12),
                       // Set the button color
                     ),
-                    icon: Icon(CupertinoIcons.play_circle,color:Colors.yellow.shade800,size: 45,shadows: [
+                    icon: Icon(CupertinoIcons.play_circle,color:Colors.yellow.shade800,size: 45,shadows: const [
                     ],)),
               ],
             ),
             const SizedBox(height: 10,),
             ListView.builder(
-              itemCount: 10,
+              itemCount: songs.length,
               physics: const ScrollPhysics(),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-              return playListSong(context);
-            },)
+                return playListSong(songModel: songs[index], audioQuery: audioQuery, dataBaseHelper: dataBaseHelper,index: index,songs: songs,);
+              },)
           ],
         ),
       ),
     );
   }
+
+  void getSuggestedSongs() {
+    songs.addAll(SongsManager.recentListens);
+    songs.addAll(SongsManager.favouriteSongs);
+    int index=0;
+    while(++index<10){
+      int random=Random().nextInt(SongsManager.songsList.length-1);
+      songs.add(SongsManager.songsList[random]);
+    }
+    songs.shuffle();
+    setState(() {});
+  }
+
+
 }
