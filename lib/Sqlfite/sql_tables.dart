@@ -4,6 +4,7 @@ static const allSongsTableName='ALL_SONGS';
 static const recentSongTableName="RECENT_SONGS";
 static const favouriteSongTableName="FAVOURITE_SONGS";
 static const userTableName="USERS";
+static const customPlaylistName="CUSTOM_PLAYLIST";
 
  static  String  userTable=''' create table if not exists $userTableName(
           email text,
@@ -71,12 +72,12 @@ static String favouriteSongsTable=''' CREATE TABLE IF NOT EXISTS $favouriteSongT
 );
   ''';
 
-static String playListsTable=''' CREATE TABLE IF NOT EXISTS Playlists (
+static String playListsTable=''' CREATE TABLE IF NOT EXISTS PLAYLISTS (
     playListId INTEGER PRIMARY KEY,
     name TEXT
 ); ''';
 
-static String customPlaylists=''' CREATE TABLE IF NOT EXISTS customPlaylist (
+static String customPlaylistsTable=''' CREATE TABLE IF NOT EXISTS $customPlaylistName (
      playListId INTEGER ,
     _id INTEGER ,
     _data TEXT,
@@ -106,6 +107,8 @@ static String customPlaylists=''' CREATE TABLE IF NOT EXISTS customPlaylist (
     is_ringtone INTEGER
 );
   ''';
+
+
 static String historyTable=''' CREATE TABLE IF NOT EXISTS $historyTableName (
      GENRE TEXT PRIMARY KEY,
      DURATION INTEGER,
@@ -115,8 +118,7 @@ static String historyTable=''' CREATE TABLE IF NOT EXISTS $historyTableName (
 
 static String allSongsTable = ''' 
   CREATE TABLE IF NOT EXISTS $allSongsTableName (
-    dataId INTEGER PRIMARY KEY AUTOINCREMENT,
-    _id INTEGER,
+    _id INTEGER PRIMARY KEY ,
     _data TEXT,
     _uri TEXT,
     _display_name TEXT,

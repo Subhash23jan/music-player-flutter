@@ -10,6 +10,8 @@ class GlobalVariables {
   }
   static const String imageUrl =
       "https://images.firstpost.com/wp-content/uploads/2017/04/prabhas-baahubali.jpg";
+
+
   static const Color backgroundColor = Color.fromARGB(255, 23, 22, 22);
   static const Color appBarColor = Color.fromARGB(255, 50, 48, 48);
   static const Gradient titleGradient = LinearGradient(

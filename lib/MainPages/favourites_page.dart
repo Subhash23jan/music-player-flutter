@@ -1,10 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:music_player_demo/Sqlfite/database_helper.dart';
 import 'package:music_player_demo/widgets/favourite_song_widget.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 import '../constants/songs_manager.dart';
+import '../play_song/play_songs.dart';
+import '../provider/songs_provider.dart';
 class FavouritesPage extends StatefulWidget {
   const FavouritesPage({super.key});
 
@@ -37,6 +41,16 @@ class _FavouritesPageState extends State<FavouritesPage> {
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor:Colors.black,
+      floatingActionButton: FloatingActionButton.small(
+          elevation: 20,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(35)
+          ),
+          onPressed: () {
+            setState(() {});
+          },
+          child: const Icon(CupertinoIcons.refresh, color: Colors.black,
+            size: 20,)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -60,7 +74,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                     ),
                     subtitle:Padding(
                       padding: const EdgeInsets.only(left: 20),
-                      child: Text("username",style: GoogleFonts.aBeeZee(color: Colors.white70,fontSize: 15),),
+                      child: Text("Subhash",style: GoogleFonts.aBeeZee(color: Colors.white70,fontSize: 15),),
                     ),
                     trailing:  Container(
                       margin: const EdgeInsets.only(right: 10),
@@ -85,7 +99,18 @@ class _FavouritesPageState extends State<FavouritesPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: (){},
+                      onPressed: (){
+                        Provider.of<SongsProvider>(
+                            context, listen: false)
+                            .updateCurrentSong(SongsManager.favouriteSongs[0]);
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) {
+                              return PlaySong(
+                                  audioQuery: audioQuery,
+                                  songList:SongsManager.favouriteSongs,
+                                  index: 0);
+                            },));
+                      },
                       style: ElevatedButton.styleFrom(
                           shadowColor: Colors.white54,
                           backgroundColor: Colors.redAccent,
@@ -101,7 +126,20 @@ class _FavouritesPageState extends State<FavouritesPage> {
                       width: 50,
                     ),
                     ElevatedButton(
-                      onPressed: (){},
+                      onPressed: (){
+                        List<SongModel>list=SongsManager.favouriteSongs;
+                        list.shuffle();
+                        Provider.of<SongsProvider>(
+                            context, listen: false)
+                            .updateCurrentSong(list[0]);
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) {
+                              return PlaySong(
+                                  audioQuery: audioQuery,
+                                  songList:list,
+                                  index: 0);
+                            },));
+                      },
                       style: ElevatedButton.styleFrom(
                           shadowColor: Colors.white54,
                           backgroundColor: Colors.orangeAccent,

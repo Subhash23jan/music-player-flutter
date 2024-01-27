@@ -23,7 +23,13 @@ class _WaitingPageState extends State<WaitingPage> {
     return const Scaffold(
       backgroundColor: Colors.black,
       body: Center(
-        child: CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,),
+        child:Stack(
+          alignment: Alignment.center,
+          children: [
+            Text("wait, it's updating!!",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),),
+            CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,)
+          ],
+        ),
       ),
     );
   }

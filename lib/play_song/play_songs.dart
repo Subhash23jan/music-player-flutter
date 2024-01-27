@@ -3,7 +3,9 @@ import 'package:audioplayers/audioplayers.dart' as audio;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:music_player_demo/Animations/beat_animation.dart';
+import 'package:music_player_demo/Services/notification_services.dart';
 import 'package:music_player_demo/Sqlfite/database_helper.dart';
 import 'package:music_player_demo/models/favourites_model.dart';
 import 'package:music_player_demo/models/recent_listens.dart';
@@ -29,7 +31,8 @@ class PlaySong extends StatefulWidget {
 
 class _PlaySongState extends State<PlaySong> {
   // final  _audioPlayer = AudioPlayer();
-  final _audioPlayer=audio.AudioPlayer()..setReleaseMode(audio.ReleaseMode.loop);
+  LocalNotificationService localNotificationService=LocalNotificationService();
+ // final _audioPlayer=audio.AudioPlayer()..setReleaseMode(audio.ReleaseMode.loop);
   final DataBaseHelper _dataBaseHelper=DataBaseHelper();
   double sliderValue = 0.0;
   double position=0;
@@ -45,10 +48,32 @@ class _PlaySongState extends State<PlaySong> {
     "Thanks - Team Shashank",
   ];
   bool isLyricsOpened = false;
+
   @override
   void initState() {
     super.initState();
+   // objectInitialize();
     Future.delayed(Duration.zero, () => playSongFromUri(context));
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    //   _songsProvider = Provider.of<SongsProvider>(context, listen: false);
+  }
+  @override
+  void dispose() {
+    // Dispose audio player instance
+    super.dispose();
+  }
+
+  objectInitialize()async{
+    if(SongsManager.audioPlayer==null){
+      SongsManager.audioPlayer=audio.AudioPlayer()..setReleaseMode(audio.ReleaseMode.loop);
+    }else{
+      await SongsManager.audioPlayer!.stop();
+      SongsManager.audioPlayer=audio.AudioPlayer()..setReleaseMode(audio.ReleaseMode.loop);
+    }
   }
   isItInLikedList() async {
     print("subhash d abs");
@@ -59,36 +84,37 @@ class _PlaySongState extends State<PlaySong> {
       setState(() {});
     }
   }
-  Future<void> playSongFromUri(BuildContext context) async {
+  Future<void> playSongFromUri(BuildContext context)  async {
+
      song = Provider.of<SongsProvider>(context, listen: false).currentSong;
     _dataBaseHelper.addToRecent(RecentSong(song!.getMap));
+    if(SongsManager.audioPlayer!=null) {
+      SongsManager.audioPlayer!.dispose();
+    }
+     SongsManager.audioPlayer=audio.AudioPlayer()..setReleaseMode(audio.ReleaseMode.loop);
     File file=await toFile(song!.uri??"");
+
      isItInLikedList();
-    await _audioPlayer.play(audio.BytesSource(await file.readAsBytes()));
+    await SongsManager.audioPlayer!.play(audio.BytesSource(await file.readAsBytes()));
+    localNotificationService.showNotificationAndroid(song!.title,song?.artist??song!.composer??song!.displayNameWOExt);
      addListeners();
-    _audioPlayer.onPositionChanged.listen((duration) {
+     SongsManager.audioPlayer!.onPositionChanged.listen((duration) {
       Provider.of<PlayControllerProvider>(context, listen: false).addCurrentPosition(duration);
     });
-    _audioPlayer.onDurationChanged.listen((duration) {
+     SongsManager.audioPlayer!.onDurationChanged.listen((duration) {
         Provider.of<PlayControllerProvider>(context, listen: false).addDuration(duration);
     });
   }
   void addListeners()async{
-     _audioPlayer.getDuration().then((value){
+    SongsManager.audioPlayer!.getDuration().then((value){
        Provider.of<PlayControllerProvider>(context, listen: false).addDuration(value!);
     });
-    _audioPlayer.getCurrentPosition().then((value){
+    SongsManager.audioPlayer!.getCurrentPosition().then((value){
       Provider.of<PlayControllerProvider>(context, listen: false).addCurrentPosition(value!);
     });
   }
   double durationToDouble(Duration duration) {
     return duration.inSeconds.toDouble();
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-
   }
   @override
   Widget build(BuildContext context) {
@@ -126,9 +152,9 @@ class _PlaySongState extends State<PlaySong> {
           body: SingleChildScrollView(
             child: Stack(
               children: [
-                isPlaying?const Align(
-                  alignment: Alignment.center,
-                    child: BeatButton()):const SizedBox(),
+                // isPlaying?const Align(
+                //   alignment: Alignment.center,
+                //     child: BeatButton()):const SizedBox(),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -220,7 +246,7 @@ class _PlaySongState extends State<PlaySong> {
                             },
                             onChangeEnd: (value) {
                               Provider.of<PlayControllerProvider>(context, listen: false).addCurrentPosition(doubleToDuration(value));
-                              _audioPlayer.seek(doubleToDuration(value));
+                              SongsManager.audioPlayer!.seek(doubleToDuration(value));
                             },
                             min: 0.0,
                             max:durationToDouble(Provider.of<PlayControllerProvider>(context, listen: true).songDuration),
@@ -232,7 +258,7 @@ class _PlaySongState extends State<PlaySong> {
                               fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,),
-                        const SizedBox(width: 5,),
+
 
                       ],
                     ),
@@ -241,13 +267,13 @@ class _PlaySongState extends State<PlaySong> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         IconButton(onPressed: () {},
-                            icon: const Icon(CupertinoIcons.shuffle,
-                              color: CupertinoColors.activeBlue, size: 30,)),
+                            icon: const Icon(Icons.shuffle,
+                              color: CupertinoColors.white, size: 30,)),
                         IconButton(onPressed: () {
                           if (widget.index > 0) {
                             songsProvider.updateCurrentSong(
                                 widget.songList[widget.index - 1]);
-                            _audioPlayer.dispose();
+                            SongsManager.audioPlayer!.dispose();
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(builder: (context) =>
                                     PlaySong(audioQuery: widget.audioQuery,
@@ -260,7 +286,7 @@ class _PlaySongState extends State<PlaySong> {
                         isPlaying ? IconButton(onPressed: () {
                           isPlaying = !isPlaying;
                           setState(() {});
-                          _audioPlayer.pause();
+                          SongsManager.audioPlayer!.pause();
                         },
                           icon: const Icon(
                             CupertinoIcons.pause, color: CupertinoColors.systemCyan,
@@ -291,7 +317,7 @@ class _PlaySongState extends State<PlaySong> {
                         IconButton(onPressed: () {
                           isPlaying = !isPlaying;
                           setState(() {});
-                          _audioPlayer.resume();
+                          SongsManager.audioPlayer!.resume();
                         },
                           icon: const Icon(
                             CupertinoIcons.play, color: CupertinoColors.systemCyan,
@@ -320,22 +346,24 @@ class _PlaySongState extends State<PlaySong> {
                             // Set the button color
                           ),),
                         IconButton(onPressed: () {
-                          print(
-                              "Before updateCurrentSong: ${songsProvider.currentSong.displayName}");
-                          songsProvider.updateCurrentSong(
-                              widget.songList[widget.index + 1]);
-                          print(
-                              "After updateCurrentSong: ${songsProvider.currentSong.displayName}");
-                          _audioPlayer.dispose();
-                         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PlaySong(audioQuery: widget.audioQuery, songList: widget.songList, index: widget.index+1),));
-                          // songsProvider.updateCurrentSong(widget.songList[widget.index+1]);
-                          print("clicked");
+                          if(widget.index<widget.songList.length-1){
+                            print(
+                                "Before updateCurrentSong: ${songsProvider.currentSong.displayName}");
+                            songsProvider.updateCurrentSong(
+                                widget.songList[widget.index + 1]);
+                            print(
+                                "After updateCurrentSong: ${songsProvider.currentSong.displayName}");
+                            SongsManager.audioPlayer!.dispose();
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PlaySong(audioQuery: widget.audioQuery, songList: widget.songList, index: widget.index+1),));
+                            // songsProvider.updateCurrentSong(widget.songList[widget.index+1]);
+                            print("clicked");
+                          }
                         },
                             icon: const Icon(CupertinoIcons.forward_end,
                               color: CupertinoColors.white, size: 30,)),
                         IconButton(onPressed: () {},
-                            icon: const Icon(CupertinoIcons.repeat,
-                              color: CupertinoColors.activeBlue, size: 30,)),
+                            icon: const Icon(Icons.repeat,
+                              color: CupertinoColors.white, size: 30,)),
                       ],
                     ),
                     const SizedBox(height: 10,),
