@@ -37,7 +37,6 @@ class _playListSongState extends State<playListSong> {
     bool isPresent = await widget.dataBaseHelper.isPresentInFavourites(widget.songModel.id);
     setState(() {
       isInLikedList = isPresent;
-      print(isPresent);
     });
   }
 
@@ -93,7 +92,7 @@ class _playListSongState extends State<playListSong> {
       title: Padding(
         padding: const EdgeInsets.only(left: 20),
         child: Text(
-          widget.songModel.title,
+          widget.songModel.displayName,
           style: GoogleFonts.aBeeZee(
             color: Colors.white,
             fontSize: 15.5,
@@ -169,9 +168,9 @@ class _playListSongState extends State<playListSong> {
                           index: widget.index);
                     },));
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.play_circle_outline_outlined,
-                color: Colors.yellow.shade900,
+                color: Colors.white,
                 size: 27,
               ),
             ),

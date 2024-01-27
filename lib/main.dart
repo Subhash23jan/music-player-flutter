@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:music_player_demo/Services/notification_services.dart';
 import 'package:music_player_demo/pages/permissionHandlerPage.dart';
 import 'package:music_player_demo/provider/play_song_provider.dart';
 import 'package:music_player_demo/provider/songs_provider.dart';
@@ -8,9 +9,10 @@ import 'package:provider/provider.dart';
 
 
 
-void main() {
+Future<void> main() async {
   Provider.debugCheckInvalidValueType = null;
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalNotificationService().init();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => SongsProvider(),),

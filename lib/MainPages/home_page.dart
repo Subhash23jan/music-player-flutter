@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:music_player_demo/MainPages/albums_page.dart';
+import 'package:music_player_demo/MainPages/kannada_hits.dart';
+import 'package:music_player_demo/MainPages/telugu_hits.dart';
 import 'package:music_player_demo/Sqlfite/database_helper.dart';
 import 'package:music_player_demo/constants/songs_manager.dart';
 import 'package:music_player_demo/models/recent_listens.dart';
@@ -375,7 +377,7 @@ class _HomePageState extends State<HomePage> {
                               child: InkWell(
                                 onTap: () => Navigator.of(context).push(
                                     MaterialPageRoute(builder: (
-                                        context) => const FavouritesPage(),)),
+                                        context) => const KannadaHits(),)),
                                 child: Container(
                                     height: 100,
                                     width: 150,
@@ -396,7 +398,7 @@ class _HomePageState extends State<HomePage> {
                                           .center,
                                       children: [
                                         Text(
-                                          "This is",
+                                          "Hits of ",
                                           style: GoogleFonts.manrope(
                                             color: Colors.white,
                                             fontSize: 17,
@@ -405,7 +407,7 @@ class _HomePageState extends State<HomePage> {
                                           textAlign: TextAlign.center,
                                         ),
                                         Text(
-                                          "POP",
+                                          "Kannada",
                                           style: GoogleFonts.redHatMono(
                                             color: Colors.white,
                                             fontSize: 33,
@@ -420,50 +422,55 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             const SizedBox(width: 15,),
-                            Card(
-                              elevation: 45,
-                              shadowColor: Colors.pink,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)
-                              ),
-                              child: Container(
-                                  height: 100,
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                          colors: [
-                                            Colors.cyan,
-                                            Colors.green,
-                                            Colors.cyan
-                                          ],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight),
-                                      borderRadius: BorderRadius.circular(15)
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "All Out",
-                                        style: GoogleFonts.manrope(
-                                          color: Colors.white,
-                                          fontSize: 17,
+                            InkWell(
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (
+                                      context) => const TeluguHits(),)),
+                              child: Card(
+                                elevation: 45,
+                                shadowColor: Colors.pink,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                child: Container(
+                                    height: 100,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                            colors: [
+                                              Colors.cyan,
+                                              Colors.green,
+                                              Colors.cyan
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight),
+                                        borderRadius: BorderRadius.circular(15)
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Telugu",
+                                          style: GoogleFonts.manrope(
+                                            color: Colors.white,
+                                            fontSize: 17,
 
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      Text(
-                                        "2010",
-                                        style: GoogleFonts.redHatMono(
-                                          color: Colors.white,
-                                          fontSize: 33,
-                                          fontWeight: FontWeight.bold,
+                                        Text(
+                                          "Hits",
+                                          style: GoogleFonts.redHatMono(
+                                            color: Colors.white,
+                                            fontSize: 33,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  )
+                                      ],
+                                    )
 
+                                ),
                               ),
                             ),
                             const SizedBox(width: 15,),
@@ -572,7 +579,7 @@ class _HomePageState extends State<HomePage> {
               ShaderMask(shaderCallback: (bounds) {
                 return GlobalVariables.getLineGradient().createShader(bounds);
               },
-                  child: Text(" Top 10 Tracks Of You!!", style: GoogleFonts.manrope(
+                  child: Text(" Top 20 Tracks Of You!!", style: GoogleFonts.manrope(
                       color: Colors.white,
                       fontSize: 17.5,
                       fontWeight: FontWeight.w500),)),
@@ -593,7 +600,7 @@ class _HomePageState extends State<HomePage> {
                   // 'Library' is empty.
                   if (item.data!.isEmpty) return const Text("Nothing found!");
                   return ListView.builder(
-                    itemCount:item.data!.length,
+                    itemCount:item.data!.length>=20?20:item.data!.length,
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
                     itemBuilder: (context, index) {

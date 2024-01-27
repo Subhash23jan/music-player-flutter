@@ -1,35 +1,32 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:music_player_demo/Sqlfite/database_helper.dart';
-import 'package:music_player_demo/constants/songs_manager.dart';
-import 'package:music_player_demo/widgets/playlist_song_widgets.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Sqlfite/database_helper.dart';
 import '../constants/Global_Variables.dart';
+import '../constants/songs_manager.dart';
 import '../play_song/play_songs.dart';
 import '../provider/songs_provider.dart';
-class SuggestionSongsPage extends StatefulWidget {
-  const SuggestionSongsPage({super.key});
+import '../widgets/playlist_song_widgets.dart';
+class TeluguHits extends StatefulWidget {
+  const TeluguHits({super.key});
 
   @override
-  State<SuggestionSongsPage> createState() => _SuggestionSongsPageState();
+  State<TeluguHits> createState() => _TeluguHitsState();
 }
-class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
+
+class _TeluguHitsState extends State<TeluguHits> {
   List<SongModel>songs=[];
   OnAudioQuery audioQuery=OnAudioQuery();
   DataBaseHelper dataBaseHelper=DataBaseHelper();
-  int counter=0;
+  int counter=-1;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getSuggestedSongs();
-    getListeningHours();
+    getSongs();
   }
   @override
   Widget build(BuildContext context) {
@@ -45,13 +42,13 @@ class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
           IconButton(
               onPressed: () {
 
-          }, icon: const Icon(Icons.more_horiz_outlined,color: Colors.white,size: 28,)),
+              }, icon: const Icon(Icons.more_horiz_outlined,color: Colors.white,size: 28,)),
           const SizedBox(
             width: 15,
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: counter==-1?const Center(child: CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,),):SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -59,9 +56,7 @@ class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
               margin: const EdgeInsets.only(top: 15,left: 10,right: 10),
               height: MediaQuery.sizeOf(context).height*0.35,
               width: MediaQuery.sizeOf(context).width,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: Image.network(GlobalVariables.imageUrl)),
+              child: Image.network(GlobalVariables.imageUrl,fit: BoxFit.cover,),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -76,20 +71,12 @@ class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
                     style: ListTileStyle.drawer,
                     selected: true,
                     selectedColor: GlobalVariables.appBarColor,
-                    title:Text("Best for Yours",style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15.5,fontWeight: FontWeight.w700),),
+                    title:Text("Telugu Hits",style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15.5,fontWeight: FontWeight.w700),),
                     subtitle:ShaderMask(shaderCallback:(bounds) {
                       return GlobalVariables.getLineGradient().createShader(bounds);
                     },child: Text("6.8 hour listened activity",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12.5,fontWeight: FontWeight.w500),)),
                   ),
                 ),
-                IconButton(onPressed: (){},
-                    style:  ButtonStyle(
-                      elevation: MaterialStateProperty.all<double>(15), // Set the elevation as needed
-                      shadowColor: MaterialStateProperty.all<Color>(Colors.white12),
-                      // Set the button color
-                    ),
-                    icon: Icon(CupertinoIcons.shuffle,color:Colors.yellow.shade800,size: 35,shadows: const [
-                    ],)),
                 IconButton(onPressed: (){
                   Provider.of<SongsProvider>(
                       context, listen: false)
@@ -107,7 +94,7 @@ class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
                       shadowColor: MaterialStateProperty.all<Color>(Colors.white12),
                       // Set the button color
                     ),
-                    icon: Icon(CupertinoIcons.play_circle,color:Colors.yellow.shade800,size: 45,shadows: const [
+                    icon: const Icon(CupertinoIcons.play_circle,color:Colors.white,size: 45,shadows: [
                     ],)),
               ],
             ),
@@ -126,22 +113,18 @@ class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
     );
   }
 
-  void getSuggestedSongs() {
-    songs.addAll(SongsManager.recentListens);
-    songs.addAll(SongsManager.favouriteSongs);
-    int index=0;
-    while(++index<10){
-      int random=Random().nextInt(SongsManager.songsList.length-1);
-      songs.add(SongsManager.songsList[random]);
+  getSongs() async {
+    print("Start");
+    List<SongModel>list=await audioQuery.querySongs(
+        uriType: UriType.EXTERNAL
+    );
+    for(SongModel song in list) {
+      if(song.genre!=null && song.genre=='Telugu') {
+        songs.add(song);
+      }
     }
-    songs.shuffle();
+    counter=0;
     setState(() {});
   }
-
-  Future<void> getListeningHours() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    counter=prefs.getInt("activity")??0;
-  }
-
-
 }
+

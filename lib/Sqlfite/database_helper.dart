@@ -33,7 +33,7 @@ class DataBaseHelper {
           await db.execute(Tables.userTable);
           await db.execute(Tables.recentListenedTable);
           await db.execute(Tables.playListsTable);
-          await db.execute(Tables.customPlaylists);
+       //   await db.execute(Tables.customPlaylistName);
           await db.execute(Tables.favouriteSongsTable);
           await db.execute(Tables.allSongsTable);
         },
@@ -58,6 +58,8 @@ class DataBaseHelper {
     Database db = await getDatabase();
     db.insert(Tables.favouriteSongTableName,songModel.toMap(),conflictAlgorithm: ConflictAlgorithm.ignore);
   }
+
+
   Future<void> removeFromFavourites(int id) async {
     Database db = await getDatabase();
     await db.rawDelete(
@@ -76,6 +78,8 @@ class DataBaseHelper {
       return [];
     }
   }
+
+
   Future<List<RecentSong>> getTopTracks() async {
     try {
       Database db = await getDatabase();
@@ -103,6 +107,8 @@ class DataBaseHelper {
     Database db = await getDatabase();
     db.insert(Tables.recentSongTableName,RecentSong(songModel.getMap).toMap());
   }
+
+
   Future<bool> isPresentInFavourites(int id) async {
     Database db = await getDatabase(); // Assuming getDatabase() returns a synchronous Database.
 
@@ -115,6 +121,8 @@ class DataBaseHelper {
     print("subhash  $count");
     return count>0;
   }
+
+
   Future<void> addSongToDatabase(SongModel songModel) async {
     Database db = await getDatabase();
     db.insert(Tables.allSongsTableName,RecentSong(songModel.getMap).toMap());
