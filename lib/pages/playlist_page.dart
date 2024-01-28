@@ -23,7 +23,7 @@ class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
   List<SongModel>songs=[];
   OnAudioQuery audioQuery=OnAudioQuery();
   DataBaseHelper dataBaseHelper=DataBaseHelper();
-  int counter=0;
+  int counter=-1;
   @override
   void initState() {
     // TODO: implement initState
@@ -33,7 +33,7 @@ class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return counter==-1?const Center(child: CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,),):Scaffold(
       backgroundColor: const Color(0x160793FF),
       appBar:AppBar(
         backgroundColor: Colors.black26,
@@ -135,6 +135,7 @@ class _SuggestionSongsPageState extends State<SuggestionSongsPage> {
       songs.add(SongsManager.songsList[random]);
     }
     songs.shuffle();
+    counter=0;
     setState(() {});
   }
 

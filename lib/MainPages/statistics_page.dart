@@ -60,7 +60,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                            child: ElevatedButton(
                              onPressed: (){},
                              style: ElevatedButton.styleFrom(
-                                 backgroundColor: Colors.redAccent
+                                 backgroundColor: Colors.white54
                              ),
                              child: Text("${SongsManager.songsList.length}", style: GoogleFonts.manrope(
                                  color: Colors.black,
@@ -90,7 +90,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                            child: ElevatedButton(
                              onPressed: (){},
                              style: ElevatedButton.styleFrom(
-                                 backgroundColor: Colors.redAccent
+                                 backgroundColor: Colors.white54
                              ),
                              child: Text("${SongsManager.recentListens.length}", style: GoogleFonts.manrope(
                                  color: Colors.black,
@@ -118,7 +118,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                          ElevatedButton(
                            onPressed: (){},
                            style: ElevatedButton.styleFrom(
-                             backgroundColor: Colors.redAccent
+                               backgroundColor: Colors.white54
                            ),
                            child: Center(
                              child: Text(" Kannada", style: GoogleFonts.manrope(

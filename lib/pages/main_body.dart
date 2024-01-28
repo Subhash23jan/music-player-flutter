@@ -17,6 +17,7 @@ class MainBodyPage extends StatefulWidget {
 class _MainBodyPageState extends State<MainBodyPage> {
   int index=0;
   late PageController _pagecontroller;
+  DateTime? currentBackPressTime;
   @override
   void initState() {
     // TODO: implement initState
@@ -26,42 +27,65 @@ class _MainBodyPageState extends State<MainBodyPage> {
   @override
   Widget build(BuildContext context) {
     _pagecontroller=PageController(initialPage:index,keepPage: true);
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: index,
-        onTap: (value) {
-          setState(() {
-            index=value;
-            _pagecontroller.jumpToPage(value);
-          });
-        },
-        showUnselectedLabels: true,
-        elevation: 18,
-        unselectedFontSize: 13,
-        selectedFontSize: 14.5,
-        unselectedIconTheme: const IconThemeData(color: Colors.white70),
-        selectedLabelStyle: GoogleFonts.shortStack(color:Colors.cyan.shade900, fontWeight: FontWeight.bold),
-        unselectedLabelStyle: GoogleFonts.shortStack(color: Colors.white70,fontWeight: FontWeight.bold),
-        unselectedItemColor: Colors.red,
-        useLegacyColorScheme: false,
-        items:  [
-          getBottomItem(const Icon(CupertinoIcons.home),"HOME" ),
-          getBottomItem(const Icon(CupertinoIcons.search),"SEARCH" ),
-          getBottomItem(const Icon(CupertinoIcons.heart),"FAVOURITES" ),
-          getBottomItem(const Icon(Icons.stacked_line_chart),"STATS" ),
-        ],
-        backgroundColor:Colors.grey.shade900,
-      ),
-      body: PageView(
-        controller: _pagecontroller,
-        physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          HomePage(),
-          SearchPage(),
-          FavouritesPage(),
-          StatisticsPage()
-        ],
+    return WillPopScope(
+      onWillPop: () async{
+        if(index!=0){
+          Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder:(context) {
+            return const MainBodyPage(index: 0,);
+          },), (route) => false);
+        }else{
+          DateTime now = DateTime.now();
+          if (currentBackPressTime == null ||
+              now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+            currentBackPressTime = now;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Press again to exit'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+            return false;
+          }
+        }
+        return true;
+      },
+      child: Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: index,
+          onTap: (value) {
+            setState(() {
+              index=value;
+              _pagecontroller.jumpToPage(value);
+            });
+          },
+          showUnselectedLabels: true,
+          elevation: 18,
+          unselectedFontSize: 13,
+          selectedFontSize: 14.5,
+          unselectedIconTheme: const IconThemeData(color: Colors.white70),
+          selectedLabelStyle: GoogleFonts.shortStack(color:Colors.cyan.shade900, fontWeight: FontWeight.bold),
+          unselectedLabelStyle: GoogleFonts.shortStack(color: Colors.white70,fontWeight: FontWeight.bold),
+          unselectedItemColor: Colors.red,
+          useLegacyColorScheme: false,
+          items:  [
+            getBottomItem(const Icon(CupertinoIcons.home),"HOME" ),
+            getBottomItem(const Icon(CupertinoIcons.search),"SEARCH" ),
+            getBottomItem(const Icon(CupertinoIcons.heart),"FAVOURITES" ),
+            getBottomItem(const Icon(Icons.stacked_line_chart),"STATS" ),
+          ],
+          backgroundColor:Colors.grey.shade900,
+        ),
+        body: PageView(
+          controller: _pagecontroller,
+          physics: const NeverScrollableScrollPhysics(),
+          children: const [
+            HomePage(),
+            SearchPage(),
+            FavouritesPage(),
+            StatisticsPage()
+          ],
+        ),
       ),
     );
   }
