@@ -10,6 +10,7 @@ Widget showAlbum(BuildContext context,AlbumModel albumModel)
   final OnAudioQuery audioQuery=OnAudioQuery();
   return Container(
     color: Colors.white10,
+      height: 350,
       child: Column(
         children: [
           Container(
@@ -17,10 +18,7 @@ Widget showAlbum(BuildContext context,AlbumModel albumModel)
             height: 150,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
-                border: Border.all(
-                    color: Colors.greenAccent.shade700,
-                    width: 2
-                )
+
             ),
             child: QueryArtworkWidget(
               controller: audioQuery,

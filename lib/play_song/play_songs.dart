@@ -222,14 +222,14 @@ class _PlaySongState extends State<PlaySong> {
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const SizedBox(width: 5,),
                         Text(formatDuration(Provider.of<PlayControllerProvider>(context, listen: true).currentPosition),
                           style: GoogleFonts.manrope(color: Colors.white,
                               fontWeight: FontWeight.w600,
-                              fontSize: 15),
+                              fontSize: 13),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,),
                         SizedBox(
@@ -255,11 +255,10 @@ class _PlaySongState extends State<PlaySong> {
                         Text(formatDuration(Provider.of<PlayControllerProvider>(context, listen: true).songDuration),
                           style: GoogleFonts.manrope(color: Colors.white,
                               fontWeight: FontWeight.w600,
-                              fontSize: 15),
+                              fontSize: 13),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,),
-
-
+                        const SizedBox(width: 1,),
                       ],
                     ),
                     const SizedBox(height: 20,),

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 import '../constants/Global_Variables.dart';
+import '../play_song/play_songs.dart';
+import '../provider/songs_provider.dart';
 
 Widget topTracks(BuildContext context,SongModel songModel)
 {
+  OnAudioQuery audioQuery=OnAudioQuery();
   return ListTile(
     leading: Container(
       decoration: BoxDecoration(
@@ -23,7 +27,16 @@ Widget topTracks(BuildContext context,SongModel songModel)
         ),),
     ),
     onTap: () {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("feature has been developing!!🥺"),duration: Duration(milliseconds: 700),));
+      Provider.of<SongsProvider>(
+          context, listen: false)
+          .updateCurrentSong(songModel);
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) {
+            return PlaySong(
+                audioQuery: audioQuery,
+                songList:[songModel],
+                index: 0);
+          },));
     },
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(1)

@@ -19,26 +19,17 @@ class _AlbumsPageState extends State<AlbumsPage> {
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        elevation: 30,
-        shadowColor: Colors.cyanAccent,
-        toolbarHeight: kToolbarHeight+45,
-        title:  Container(
-          width: MediaQuery.sizeOf(context).width,
-          height: kToolbarHeight,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              gradient: GlobalVariables.buttonGradient
-          ),
-          child: Text("Albums Page", style: GoogleFonts.aBeeZee(
-              color: Colors.white,
-              fontSize: 17.5,
-              fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,),
-        ),
-      ),
+      appBar:AppBar(
+      elevation: 15,
+      shadowColor: Colors.white30,
+      centerTitle: true,
+      backgroundColor: Colors.black,
+      title:Text("Song Albums ", style: GoogleFonts.manrope(
+          color: Colors.white,
+          fontSize: 18.5,
+          fontWeight: FontWeight.w500),),
+      toolbarHeight: kToolbarHeight,
+    ),
       body:FutureBuilder<List<AlbumModel>>(
         builder: (context, item) {
           // Display error, if any.
