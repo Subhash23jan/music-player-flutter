@@ -34,12 +34,11 @@ class _KannadaHitsState extends State<KannadaHits> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0x160793FF),
-      appBar:AppBar(
-        backgroundColor: Colors.black26,
-        toolbarHeight: kToolbarHeight-10,
-        elevation: 38,
-        shadowColor: Colors.black12,
-        leading: IconButton(onPressed: ()=>Navigator.pop(context), icon:const Icon(Icons.arrow_back,color: Colors.white70)),
+      appBar: AppBar(
+        elevation: 15,
+        shadowColor: Colors.white30,
+        centerTitle: true,
+        backgroundColor: Colors.black54,
         actions: [
           IconButton(
               onPressed: () {
@@ -49,17 +48,37 @@ class _KannadaHitsState extends State<KannadaHits> {
             width: 15,
           ),
         ],
+        title:Text(" Kannada Hits", style: GoogleFonts.manrope(
+            color: Colors.white,
+            fontSize: 18.5,
+            fontWeight: FontWeight.w500),),
+        toolbarHeight: kToolbarHeight,
       ),
       body: counter==-1?const Center(child: CircularProgressIndicator(color: Colors.blue,strokeWidth: 2,),):SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(top: 15,left: 10,right: 10),
-              height: MediaQuery.sizeOf(context).height*0.35,
+              height:330,
               width: MediaQuery.sizeOf(context).width,
-              child: Image.network(SongsManager.kannadaImages[counter],fit: BoxFit.cover,),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  color:Colors.white10,
+                  border: Border.all(
+                      color: Colors.cyanAccent,
+                      width: .1
+                  )
+              ),
+              child: QueryArtworkWidget(
+                controller: audioQuery,
+                artworkFit: BoxFit.cover,
+                artworkQuality: FilterQuality.high,
+                 artworkBorder:  BorderRadius.circular(25),
+                id: songs[counter].id,
+                type: ArtworkType.AUDIO,
+                quality:100,
+              ),
             ),
+            const SizedBox(height: 20,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -73,7 +92,7 @@ class _KannadaHitsState extends State<KannadaHits> {
                     style: ListTileStyle.drawer,
                     selected: true,
                     selectedColor: GlobalVariables.appBarColor,
-                    title:Text("Kannada Hits",style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15.5,fontWeight: FontWeight.w700),),
+                    title:Text("Kannada Hits",style:GoogleFonts.aBeeZee(color: Colors.white,fontSize: 17.5,fontWeight: FontWeight.w700),),
                     subtitle:ShaderMask(shaderCallback:(bounds) {
                       return GlobalVariables.getLineGradient().createShader(bounds);
                     },child: Text("6.8 hour listened activity",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 12.5,fontWeight: FontWeight.w500),)),
@@ -125,7 +144,7 @@ class _KannadaHitsState extends State<KannadaHits> {
          songs.add(song);
        }
      }
-     counter=Random().nextInt(SongsManager.kannadaImages.length);
+     counter=Random().nextInt(songs.length);
         setState(() {});
    }
   }

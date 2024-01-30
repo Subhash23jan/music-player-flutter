@@ -4,13 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player_demo/Animations/beat_animation.dart';
 import 'package:music_player_demo/Services/notification_services.dart';
 import 'package:music_player_demo/Sqlfite/database_helper.dart';
 import 'package:music_player_demo/models/favourites_model.dart';
 import 'package:music_player_demo/models/recent_listens.dart';
 import 'package:music_player_demo/provider/songs_provider.dart';
-import 'package:music_player_demo/songs/others_widget.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:uri_to_file/uri_to_file.dart';
@@ -76,9 +74,7 @@ class _PlaySongState extends State<PlaySong> {
     }
   }
   isItInLikedList() async {
-    print("subhash d abs");
     bool ans=await DataBaseHelper().isPresentInFavourites(song?.id??0);
-    print("subhash d $ans");
     if(ans){
       isInLikedList=true;
       setState(() {});

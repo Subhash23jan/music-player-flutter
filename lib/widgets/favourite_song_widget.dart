@@ -42,6 +42,7 @@ Widget favouriteSong(int index,OnAudioQuery audioQuery,BuildContext context){
             onPressed: (){
               DataBaseHelper dbhelper=DataBaseHelper();
               dbhelper.removeFromFavourites(SongsManager.favouriteSongs[index].id);
+              SongsManager.favouriteSongs.removeAt(index);
             },
             style: const ButtonStyle(),
             icon: const Icon(Icons.favorite_outlined,color:Colors.redAccent,size: 27,))
