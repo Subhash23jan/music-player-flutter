@@ -57,8 +57,5 @@ Widget songWidget(BuildContext context,List<SongModel>songList,int index, OnAudi
         maxLines: 1,
         overflow: TextOverflow.ellipsis,)),
     ),
-    trailing:IconButton(onPressed: (){},
-        padding: const EdgeInsets.only(left: 5),
-        icon: const Icon(CupertinoIcons.heart,color:Colors.redAccent,size: 25,)),
   );
 }
